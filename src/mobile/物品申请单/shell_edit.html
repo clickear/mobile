@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>example</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../../css/mobile.css">
+<link rel="stylesheet" href="../../css/mobile_hack.css">
+<link href="../../css/control/ScrollerDatepicker.css" rel="stylesheet" />
+<script src="../../js/lib/jquery-1.9.1.js"></script>
+<script src="../../js/lib/iscroll.js"></script>
+<script src="../../js/lib/moment-with-locales.min.js"></script>
+<script src="../../js/control/ScrollerDatepicker.js"></script>
+<script src="../../js/lib/vue.js"></script>
+<script src="../../js/lib/Sortable.js"></script>
+<script src="../../js/vue.addons.js"></script>
+
+<link href="../../libs/PhotoSwipe/css/photoswipe.css" rel="stylesheet">
+<link href="../../libs/PhotoSwipe/css/default-skin.css" rel="stylesheet">
+<script src="../../libs/PhotoSwipe/js/photoswipe.js"></script>
+<script src="../../libs/PhotoSwipe/js/photoswipe-ui-default.js"></script>
+<style>
+.datePlugin {
+    display: block;
+    width: 100%;
+    height: 150px;
+    margin: auto;
+    /* border: solid 1px #ff0000; */
+}
+</style>
+</head>
+
+<body>
+<script>
+/* mock */
+var initData = {
+    "ViewType":0,
+    "FlowState":4,
+    "IsAutoFLow":0,
+    "ApprovalState":1,
+    "useType": 1,
+    "goodsArr" : '[{"goodsName":"笔记本/本","goodsItemNum":2},{"goodsName":"药品/克","goodsItemNum":5.6}]',
+    "reason":"李总将在上海差旅，需要在明天之前领取",
+    "uploadSoundArr":[{
+        "src":"sfsdfdgdf",
+        "time":"20'",
+        "date":"12.23"
+        }],
+    "uploadPicArr":[
+        {
+            "src": "../../libs/PhotoSwipe/data/15008518202_b016d7d289_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者"
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/15008465772_383e697089_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者"
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/14985868676_4b802b932a_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者"
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/15008867125_68a8ed88cc_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者"
+        }
+    ],
+    "fixSendPersonArr":[],
+    "fixNextPersonArr":[{name:1,code:1},{name:2,code:2},{name:13,code:13}],
+    "approverSendPerson":[],
+    "approverNextPerson":[],
+    "approverUploadSound":[]
+}
+/* mock end*/
+
+
+</script>
+
+<link rel="import" href="edit.html?__inline">
+</body>
+</html>

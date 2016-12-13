@@ -1,0 +1,21 @@
+        <!-- <div class="type type-account">
+            <h2>费用总计</h2>
+            <p class="p1"><i>{{lAllPrice}}</i>元</p>
+        </div> -->
+        <p class="type_row"><span class="lab">报销费用：</span>{{lAllPrice}}元</p>
+    </div>
+</div>
+<div class="receipt">
+    <div class="receipt-header">
+        <div class="receipt-reason">
+        <p class="lab">报销内容：</p>
+        <div class="receipt-account-con">
+            <div class="item" v-for="row in claimItemArr">
+                <div class="p1 clx">
+                    <span class="capsule">{{row.claimName}}</span>
+                    <span class="s2">{{row.claimPrice}}元</span>
+                </div>
+                <p class="p2">{{row.claimReason}}</p>
+            </div>
+        </div>
+            

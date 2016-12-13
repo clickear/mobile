@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>外出申请单</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../css/mobile.css">
+<link rel="stylesheet" href="../css/mobile_hack.css">
+</head>
+
+<body>
+    <div class="ly-header">
+        <a class="l" href="javascript:;">取消</a>
+        <h2>物品申请单</h2>
+    </div>
+    <div class="receipt receipt-create">
+        <div class="receipt-goods-pane">
+            <div class="tit">办公使用<a class="btn-edit fr" href="javascript:;"></a></div>
+            <div class="con">
+                <div class="single-row">
+                    <span class="s1"><i class="r">*</i>申领物品</span>
+                    <a class="btn-add" href="javascript:;"></a>
+                </div>
+                <div class="add-goods">
+                    <input class="i1" placeholder="物品名称/单位" type="text"/>
+                    <input class="i2" placeholder="数量" type="text"/>
+                    <a class="btn-minus" href="javascript:;"></a>
+                </div>
+            </div>
+        </div>
+        <div class="edit-content">
+            <div class="txt-con">
+                <span class="r">*</span>
+                <textarea class="text-area" placeholder="原因"></textarea>
+                <span class="num"><i>20</i>/200</span>
+            </div>
+            <div class="usual-txt">
+                <a class="fn-btn-gray active" href="javascript:;">公事外出</a>
+                <a class="fn-btn-gray" href="javascript:;">医院待产</a>
+            </div>
+            <div class="add-media">
+                <a class="pic-btn" href="javascript:;"></a>
+                <a class="voice-btn" href="javascript:;"></a>
+            </div>
+            <div class="receipt-reason">
+                <div class="voice" data-action="edit">
+                    <span class="v1">30'</span>
+                    <span class="v2">08-19</span>
+                </div>
+                <div class="pic">
+                    <span data-action="edit"><img src="" alt=""/></span>
+                    <span><img src="" alt=""/></span>
+                    <span><img src="" alt=""/></span>
+                </div>
+
+            </div>
+        </div>
+        <div class="receipt-add">
+            <h3>审批人员：</h3>
+            <div class="avatar">
+                <img src="../img/pic/user.png" alt=""/>
+                <span class="name">我</span>
+            </div>
+            <!--
+            data-action="edit" 编辑状态
+            -->
+            <div class="avatar"  data-action="edit">
+                <img src="../img/pic/user.png" alt=""/>
+                <span class="name">我</span>
+            </div>
+            <a class="fn-btn-add" href="javascript:;"></a>
+        </div>
+        <div class="receipt-add audit">
+            <h3>抄送:</h3>
+            <div class="avatar">
+                <img src="../img/pic/user.png" alt=""/>
+                <span class="name">我</span>
+            </div>
+            <div class="avatar">
+                <img src="../img/pic/user.png" alt=""/>
+                <span class="name">我我我我</span>
+            </div>
+
+            <div class="avatar">
+                <img src="../img/pic/user.png" alt=""/>
+                <span class="name">我</span>
+            </div>
+            <a class="fn-btn-add" href="javascript:;"></a>
+        </div>
+        <div class="btm">
+            <!-- data-action="disable" 不能用状态 -->
+            <input type="button" data-action="disable" class="fn-btn" value="撤销"/>
+        </div>
+    </div>
+    <!--提示弹窗-->
+    <!--
+        data-action="warn" 警告状态
+        data-action="success" 成功状态
+    -->
+    <div class="fn-tip3-modal hide" data-action="warn">
+        <p class="txt">
+            <ins class="tip-icon"></ins>
+            <span>网络异常，表单提交失败！</span>
+        </p>
+    </div>
+    <!--/提示弹窗-->
+    <!--公共弹窗组件-->
+
+    <div class="ui-modal confirm-modal hide">
+        <div class="modal-header">
+            <h3 >是否退出当前页面</h3>
+        </div>
+        <div class="modal-btn">
+            <a class="btn-cancel" href="javascript:;">取消</a>
+            <a class="btn-confirm" href="javascript:;">确认</a>
+        </div>
+    </div>
+
+    <!--/公共弹窗组件-->
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>example</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../../css/mobile.css">
+<link rel="stylesheet" href="../../css/mobile_hack.css">
+<link href="../../css/control/ScrollerDatepicker.css" rel="stylesheet" />
+<script src="../../js/lib/jquery-1.9.1.js"></script>
+<script src="../../js/lib/iscroll.js"></script>
+<script src="../../js/SopControl.js"></script>
+<script src="../../js/lib/moment-with-locales.min.js"></script>
+<script src="../../js/control/ScrollerDatepicker.js"></script>
+<script src="../../js/lib/vue.js"></script>
+<script src="../../js/lib/Sortable.js"></script>
+<script src="../../js/vue.addons.js"></script>
+
+<link href="../../libs/PhotoSwipe/css/photoswipe.css" rel="stylesheet">
+<link href="../../libs/PhotoSwipe/css/default-skin.css" rel="stylesheet">
+<script src="../../libs/PhotoSwipe/js/photoswipe.js"></script>
+<script src="../../libs/PhotoSwipe/js/photoswipe-ui-default.js"></script>
+<style>
+.datePlugin {
+    display: block;
+    width: 100%;
+    height: 150px;
+    margin: auto;
+    /* border: solid 1px #ff0000; */
+}
+</style>
+</head>
+
+<body>
+<script>
+/* mock */
+var initData = {
+    "Enable" : 1,
+    "ViewType":2,
+    "FlowState":3,
+    "IsAutoFLow":1,
+    "ApprovalState":1,
+    "kqItemId":1245,
+    "kqItemName":"年假",
+    "dStartDate":"2015-12-29T01:00:00",
+    "dEndDate":"2018-12-29T01:00:00",
+    "lAllTime": 9,
+    "reason":"家中有事：由于身体不适，需要在家休养。",
+    "uploadSoundArr":[
+        {
+            "src":"sfsdfdgdf",
+            "time":"20",
+            "date":"12.23",
+            "formatterStr":"2m50s 08-12"
+        }
+    ],
+    "uploadPicArr":[
+        {
+            "src": "../../libs/PhotoSwipe/data/15008518202_b016d7d289_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者",
+            "fileName": 'xx'
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/15008465772_383e697089_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者",
+            "fileName": 'xxx'
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/14985868676_4b802b932a_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者",
+            "fileName": 'xxxx'
+        },
+        {
+            "src": "../../libs/PhotoSwipe/data/15008867125_68a8ed88cc_m.jpg",
+            "w": 1600,
+            "h": 1600,
+            "author": "作者",
+            "fileName": 'xxxxx'
+        }
+    ],
+    "approvalRecord":[
+        {
+            "nodeState":2,
+            "option": "你大爷也",
+            "approverId":123456,
+            "approverName":"松岛枫",
+            "completeTime":"2015.12.25 19:30",
+            "contentStr":"",
+            "approverUploadSound":[{
+                "src":"sfsdf",
+                "time":"30'",
+                "date":"12.24"
+                }
+            ],
+            "approverNextPerson":[],
+            "approverSendPerson":["啦啦","呀呀"]
+        },
+        {
+            "nodeState":1,
+            "option": "你大爷也",
+            "approverId":123456,
+            "approverName":"松岛枫1",
+            "completeTime":"2015.12.25 19:30",
+            "contentStr":"请假条，是请求领导或老师或其它，准假不参加某项工作、学习、活动等的文书。",
+            "approverUploadSound":[],
+            "approverNextPerson":[],
+            "approverSendPerson":["水电费","多岁的"]
+        },
+        {
+            "nodeState":3,
+            "option": "你大爷也",
+            "approverId":123456,
+            "approverName":"松岛枫2",
+            "completeTime":"2015.12.25 19:30",
+            "contentStr":"请假条，是请求领导或老师或其它，准假不参加某项工作、学习、活动等的文书。请假条因为请假的原因，一般分为请病假和请事假两种。它是公文",
+            "approverUploadSound":[],
+            "approverNextPerson":[],
+            "approverSendPerson":[]
+        },
+        {
+            "nodeState":4,
+            "option": "你大爷也",
+            "approverId":123456,
+            "approverName":"松岛枫3",
+            "completeTime":"2015.12.25 19:30",
+            "contentStr":"",
+            "approverUploadSound":[],
+            "approverNextPerson":[],
+            "approverSendPerson":[]
+        }
+    ],
+    "approverSendPerson":[{name:'123'}, { name:'789'}],
+    "fixNextPersonArr":[{name:'1', "code": 1}, {name:'2', "code": 2}, {name:'3', "code": 3}, {name:'4', "code": 4}, {name:'2', "code": 2} ],
+    "approverUploadSound":[]
+}
+
+/* mock end*/
+</script>
+
+<link rel="import" href="edit.html?__inline">
+</body>
+</html>

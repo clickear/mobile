@@ -1,0 +1,39 @@
+@charset "UTF-8";
+*, *:before, *:after{ box-sizing:border-box;}
+body, h1, h2, h3, h4, h5, h6, p, dl, dd, ul, ol, pre, blockquote, textarea, input, button, hr, figure{ margin:0;}
+ul, ol, th, td, button, textarea, input{ padding:0;}
+ul, ol{ list-style:none;}
+img{ vertical-align:top; border:none;}
+table{ border-collapse:collapse; border-spacing:0;}
+input, textarea, select{ font-family:STXihei, "Microsoft YaHei", sans-serif;}
+input, select{ vertical-align:middle;}
+textarea { resize:vertical;}
+label{ cursor:pointer;}
+
+.show{ display:block;} .ibshow{ display:inline-block; *display:inline; *zoom:1;} .hide{ display:none !important;}
+.fl{ float:left;} .fr{ float:right;} .cl{ clear:both;}
+.clx{ *zoom:1;} .clx:after{ content:""; display:table; clear:both;}
+
+.fb{ font-weight:700;}
+.tl{ text-align:left;} .tc{ text-align:center;} .tr{ text-align:right;}
+small, .fz12{ font-size:12px;} .fz14{ font-size:14px;}
+.textoverflow{ overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.wordbreak{ word-break:break-all; word-wrap:break-word;}
+.nowrap{ white-space:nowrap;}
+
+html, body{ height:100%;}
+body{ font:12px/1.8 'Helvetica Neue', Tahoma, 'Hiragino Sans GB', STXihei, 'WenQuanYi Micro Hei', 'Microsoft YaHei', SimSun, sans-serif; background-color:#f3f4f8; color:#333;}
+a{ color:#1b85f8; text-decoration:none;}
+a:hover{ color:#3d9aff;}
+
+.mt10{ margin-top:10px;}
+.mt20{ margin-top:20px;}
+
+.ml10{ margin-left:10px;}
+.ml20{ margin-left:20px;}
+
+.mr10{ margin-right:10px;}
+.mr20{ margin-right:20px;}
+
+.mb10{ margin-bottom:10px;}
+.mb20{ margin-bottom:20px;}

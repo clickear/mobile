@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>出差申请单</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../css/mobile.css">
+<link rel="stylesheet" href="../css/mobile_hack.css">
+</head>
+
+<body>
+    <div class="ly-header">
+        <a class="btn-back" href="javascript:;"></a>
+        <h2>出差申请单</h2>
+        <a class="btn-msg" href="javascript:;"></a>
+    </div>
+    <div class="receipt-relate">
+        <div class="avatar">
+            <img src="../img/pic/user.png" alt=""/>
+            <span class="name">我</span>
+        </div>
+        <div class="type type-business">
+            <h2><span>5</span>天</h2>
+            <span class="t"><i>3500.00</i>元</span>
+            <p class="d"><ins></ins>2015-05-16 8:00 至 2015-05-16 12:00</p>
+        </div>
+        <!--
+            data-action="success"表示通过
+            data-action="progress"表示审核中
+            data-action="reject"表示拒绝
+            data-action="revoke"表示撤销状态
+        -->
+        <a class="receipt-btn" data-action="reject" href="javascript:;"></a>
+    </div>
+    <div class="receipt">
+        <div class="receipt-header">
+            <div class="receipt-reason">
+                <div class="receipt-business-con">
+                    <div class="item">
+                        <span class="capsule ">出发</span>
+                        <span>北京</span>
+                    </div>
+                    <div class="item">
+                        <span class="capsule ">到达</span>
+                        <span>上海</span>
+                    </div>
+                </div>
+                <h3>家中有事：由于身体不适，需要在家休养。</h3>
+                <div class="voice">
+                    <span class="v1">30'</span>
+                    <span class="v2">08-19</span>
+                </div>
+                <div class="pic">
+                    <span><img src="" alt=""/></span>
+                    <span><img src="" alt=""/></span>
+                    <span><img src="" alt=""/></span>
+                </div>
+            </div>
+            <!-- data-action="active" 展开统计内容 -->
+            <div class="statistics" data-action="active">
+                <a class="btn-st" href="javascript:;">请假统计</a>
+                <div class="statistics-content ">
+                    <table class="s-table">
+                        <col width="110px"/>
+                        <col width="50px"/>
+                        <col width="50px"/>
+                        <col width="50px"/>
+                        <tr>
+                            <td></td>
+                            <td class="t1"><div class="bar" style="height: 50%"></div></td>
+                            <td class="t1"><div class="bar" style="height: 80%"></div></td>
+                            <td class="t1"><div class="bar" style="height: 40%"></div></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="t2">7月</td>
+                            <td class="t2">8月</td>
+                            <td class="t2">9月</td>
+                        </tr>
+                        <tr>
+                            <td>请假次数：</td>
+                            <td class="t3">1次</td>
+                            <td class="t3">2次</td>
+                            <td class="t3">2次</td>
+                        </tr>
+                        <tr>
+                            <td>总共请假天数：</td>
+                            <td class="t4">3天</td>
+                            <td class="t4">8天</td>
+                            <td class="t4">5天</td>
+                        </tr>
+                    </table>
+                    <!--无数据-->
+                    <div class="no-data hide">暂无统计数据</div>
+                </div>
+            </div>
+        </div>
+        <div class="receipt-content">
+            <ul class="receipt-list">
+                <!--
+                    data-action="success"表示通过
+                    data-action="progress"表示审核中
+                    data-action="reject"表示拒绝
+                    data-action="revoke"表示撤销状态
+                -->
+                <!--
+                .active 表示选中的状态
+                -->
+                <li class="active" data-action="success">
+                    <p class="t">17:00:50  2015-09-12</p>
+                    <h4>审批通过</h4>
+                    <div class="avatar">
+                        <img src="../img/pic/user.png" alt=""/>
+                        <span class="name">我</span>
+                    </div>
+                </li>
+                <li data-action="reject">
+                    <p class="t">17:00:50  2015-09-12</p>
+                    <h4>审批通过</h4>
+                    <div class="avatar">
+                        <img src="../img/pic/user.png" alt=""/>
+                        <span class="name">我我我</span>
+                    </div>
+
+                    <div class="opinion">
+                        <p class="p1">审批意见：</p>
+                        <p class="p2">请假条，是请求领导或老师或其它，准假不参加某项工作、学习、活动等的文书。请假条因为请假的原因，一般分为请病假和请事假两种。它是公文... </p>
+                        <a href="javascript:;">显示更多</a>
+                        <div></div>
+                    </div>
+                    <div class="voice">
+                        <span class="v1">30'</span>
+                        <span class="v2">08-19</span>
+                    </div>
+                    <div class="addition">
+                        <p class="s1">新增抄送人：</p>
+                        <div>
+                            <span class="s2">陈俞宏</span>
+                            <span class="s2">陈俞宏</span>
+                            <span class="s2">陈俞宏</span>
+                        </div>
+                    </div>
+                </li>
+                <li data-action="progress">
+                    <p class="t">17:00:50  2015-09-12</p>
+                    <h4>审批中</h4>
+                    <div class="opts">
+                        <!--不换行-->
+                        <a href="javascript:;">催审</a><a href="javascript:;">沟通</a>
+                    </div>
+                    <div class="avatar">
+                        <img src="../img/pic/user.png" alt=""/>
+                        <span class="name">我</span>
+                    </div>
+                </li>
+                <li data-action="revoke">
+                    <p class="t">17:00:50  2015-09-12</p>
+                    <h4>已撤销</h4>
+                    <div class="avatar">
+                        <img src="../img/pic/user.png" alt=""/>
+                        <span class="name">我</span>
+                    </div>
+                </li>
+                <li >
+                    <h4>未开始</h4>
+
+                    <div class="avatar">
+                        <img src="../img/pic/user.png" alt=""/>
+                        <span class="name">我</span>
+                    </div>
+                </li>
+            </ul>
+            <div class="receipt-add">
+                <h3>抄送:</h3>
+                <div class="avatar">
+                    <img src="../img/pic/user.png" alt=""/>
+                    <span class="name">我</span>
+                </div>
+                <div class="avatar">
+                    <img src="../img/pic/user.png" alt=""/>
+                    <span class="name">我我我我</span>
+                </div>
+                <div class="avatar">
+                    <img src="../img/pic/user.png" alt=""/>
+                    <span class="name">我</span>
+                </div>
+                <a class="fn-btn-add" href="javascript:;"></a>
+                <a class="fn-btn-minus" href="javascript:;"></a>
+            </div>
+        </div>
+    </div>
+    <div class="ly-footer">
+        <input type="button" class="fn-btn " value="撤销"/>
+        <!--拒绝,同意按钮-->
+        <div class="receipt-btns clx hide">
+            <input type="button" class="btn-reject fl" value="拒绝"/>
+            <input type="button" class="btn-primary fr" value="同意">
+        </div>
+        <!--/拒绝,同意按钮-->
+    </div>
+
+    <!--顶部提示-->
+    <div class="ui-top-tip hide" data-status="telephone">
+        <p class="p1">当前为听筒模式！</p>
+    </div>
+    <!--/顶部提示-->
+
+    <!--模特弹窗-->
+    <div class="ui-btm-modal hide">
+        <div class="btm-modal-content">
+            <p class="p1">使用手机扬声器进行语音播放，声音会比听筒模式大！</p>
+            <a href="javascript:;">使用扬声器</a>
+        </div>
+        <a class="btm-modal-btn" href="javascript:;">返回</a>
+    </div>
+    <!--/模特弹窗-->
+
+    <!--提示弹窗-->
+    <!--
+        data-action="warn" 警告状态
+        data-action="success" 成功状态
+    -->
+    <div class="fn-tip3-modal hide" data-action="warn">
+        <p class="txt">
+            <ins class="tip-icon"></ins>
+            <span>已催审，不能再次催审！</span>
+        </p>
+    </div>
+    <!--/提示弹窗-->
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>图片浏览控件</title>
+    <link href="css/photoswipe.css" rel="stylesheet">
+    <link href="css/default-skin.css" rel="stylesheet">
+    <script src="js/photoswipe.js"></script>
+    <script src="js/photoswipe-ui-default.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery("#btnPhoto").click(Init);
+            jQuery("#btnPhoto").click();
+        });
+        function Init(value) {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+            var items = [];
+
+            item = {
+                src: "data/1.jpg",
+              
+                title: "标题1"
+            };
+            items.push(item);
+            item = {
+                src: "data/2.jpg",
+               
+                title: "标题2"
+            };
+            items.push(item);
+            item = {
+                src: "data/3.jpg",
+                
+                title: "标题3"
+            };
+            items.push(item);
+            item = {
+                src: "data/4.jpg",
+                
+                title: "标题4"
+            };
+            items.push(item);
+            var index = 0;
+            try {
+                index = parseInt(value);
+            } catch (e) {
+                index = 0;
+            }
+            var options = {
+                index: index,//选择项
+                galleryUID: 1,//
+                addCaptionHTMLFn: function (item, captionEl, isFake) {//添加字幕的html
+                    if (!item.title) {
+                        captionEl.children[0].innerText = '';
+                        return false;
+                    }
+                    captionEl.children[0].innerHTML = item.title;
+                    return true;
+                }
+            };
+            photoSwipe = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+            photoSwipe.init();
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input type="button" id="btnPhoto" value="按钮方式浏览" />
+    </div>
+    <div>
+        <ul>
+            <li><a href="javascript:Init(0);">
+                <img src="data/1.jpg" /></a></li>
+            <li><a href="javascript:Init(1);">
+                <img src="data/2.jpg" /></a></li>
+            <li><a href="javascript:Init(2);">
+                <img src="data/3.jpg" /></a></li>
+            <li><a href="javascript:Init(3);">
+                <img src="data/4.jpg" /></a></li>
+        </ul>
+    </div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)" value="asdf"></button>
+                    <!--<button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>-->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip">
+                    </div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

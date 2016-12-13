@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>example</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../css/mobile.scss">
+<link rel="stylesheet" href="../css/mobile_hack.css">
+</head>
+
+<body>
+<div class="register">
+    <!--公共头部-->
+    <!-- 不同的步骤修改data-status的step值， 如step1, step2 -->
+    <ul class="register-step clx" data-status="step3">
+        <li class="register-step-item"><span class="mark"><i></i></span></li>
+        <li class="register-step-item"><span class="mark"><i></i></span></li>
+        <li class="register-step-item"><span class="mark"><i></i></span></li>
+    </ul>
+
+    <!-- 注册第一步 -->
+    <div class="register-content register-content-step1 hide">
+        <div class="step-text">
+            <p class="c-blue">立即加入云办公</p>
+        </div>
+        <div class="ipt ipt-phone">
+            <input  type="text" placeholder="请输入手机号"/>
+            <a class="icon-del hide" href="javascript:;"></a>
+        </div>
+
+        <p class="rule">点击下一步，表示您已阅读并同意<a href="javascript:;">《服务条款》</a></p>
+        <!-- data-action="disable"表示按钮不可用状态，可用为空 -->
+        <a href="javascript:;" class="btn-register" data-action="disable">下一步</a>
+    </div>
+    <!-- /注册第一步 -->
+
+    <!-- 注册第二步 -->
+    <div class="register-content register-content-step2 hide">
+        <div class="step-text">
+            <p class="c-gray">已给此号码发送了短信验证码</p>
+            <p class="c-blue">159 5915 6888</p>
+        </div>
+        <div class="ipt ipt-code">
+            <input  type="text" placeholder="请输入验证码"/>
+            <a class="icon-del " href="javascript:;"></a>
+            <span class="code-time">重新发送</span>
+        </div>
+        <p class="rule">点击下一步，表示您已阅读并同意<a href="javascript:;">《服务条款》</a></p>
+        <!-- data-action="disable"表示按钮不可用状态，可用为空 -->
+        <a href="javascript:;" class="btn-register" data-action="disable">下一步</a>
+    </div>
+    <!-- /注册第二步 -->
+
+    <!-- 注册第三步 -->
+    <div class="register-content register-content-step3 ">
+        <div class="step-text">
+            <p class="c-blue">设置您的姓名和密码</p>
+        </div>
+        <div class="ipt ipt-user">
+            <input  type="text" placeholder="请输入您的真实姓名"/>
+        </div>
+        <div class="ipt ipt-pwd">
+            <input  type="text" placeholder="密码6-20位，支持数字和字母大小写"/>
+            <a class="icon-see" href="javascript:;"></a>
+        </div>
+        <!-- data-action="disable"表示按钮不可用状态，可用为空 -->
+        <a href="javascript:;" class="btn-register" data-action="">完成</a>
+    </div>
+    <!-- /注册第三步 -->
+</div>
+
+
+</body>
+</html>

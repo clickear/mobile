@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="favicon.png" rel="icon">
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/layer/mobile/layer.js"></script>
+    <script src="js/AreaPicker.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript">
+        var pageii;
+        jQuery(document).ready(function () {
+            jQuery("[name=btnArea]").click(SelectArea);
+        });
+
+        function SelectArea() {
+            var config = {
+                SelectCallback: AreaResult,
+            };
+            areaPicker.Init(config);
+        }
+
+        function AreaResult(Result) {
+            jQuery("[name=area]").html(Result.Key + "_" + Result.Name)
+        }
+    </script>
+</head>
+<body>
+    <div> </div>
+    <div>
+        <input type="button" name="btnArea" value="选择城市" />
+    </div>
+    <div>城市:<span name="area"></span></div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿body,div,p,dt,dl{margin:0;padding:0;}
+
+.container{height:100%;width:100%;position:absolute;overflow-x:hidden;}
+/*= Header =*/
+header{display:block;}
+header{color:#fff;width:100%;height:45px;background:#4D96E0;}
+header hgroup{float:left;width:70%;padding:9px 0;overflow:hidden;text-align:center;}
+
+header .left,header .right{float:left;width:15%;padding:9px 0;overflow:hidden;}
+header .right{text-align:right;}
+header .left p{padding-left:15px;text-align:left;}
+header .right p{padding-right:15px;}
+header .left a img{height:23px;width:22px;}
+header .right a img{height:22px;width:23px;}
+
+/*= userinfo =*/
+.userinfo { background-color:#f5f5f5; border-bottom:1px solid #c8c8c8; padding-bottom:5px; position:relative;height:65px; overflow:hidden; }
+.userinfo dl{ height:56px;padding-top:6px;width:80%}
+.userinfo dl dt { width:72px; height:46px;float:left;}
+.userinfo dl dt img{ box-shadow:1px 2px 2px #c2c2c2; border-radius:5px; width:56px; height:56px; }
+.userinfo dl dd { font-size:1.1em; width:50%;float:left;text-align:left;height:28px;line-height:28px; color:#999; overflow:hidden;text-overflow: ellipsis; }
+.userinfo dl dd span{color:#333;}
+.loading_wrap{width:100%;height:24px;position:fixed;left:0;bottom:0;text-align:center;z-index:10000;line-height:24px;font-size:13px;color:#fff;background:#000;opacity:0.7;}
+.loading_wrap span{background:url(../images/mobile/loading_2.gif) left center no-repeat;padding-left:20px;}
+.hiddenfield{display:none;}

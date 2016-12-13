@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>开始</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../css/mobile.scss">
+<link rel="stylesheet" href="../css/mobile_hack.css">
+</head>
+
+<body>
+<div class="receipt">
+    <div class="receipt-reason">
+        <div class="pic fix">
+            <span>
+                <em class="img-box" style="background-image: url(&quot;../../libs/PhotoSwipe/data/15008518202_b016d7d289_m.jpg&amp;size=80&quot;);"></em>
+                <ins class="icon-del"></ins>
+                <ins id="progress1" class="progress">
+                    <!-- <em class="progress-txt">
+                        正在上传中
+                    </em>
+                    <em class="progress-level">
+                        80%
+                    </em> -->
+                </ins>
+            </span>
+            <span>
+                <em class="img-box" style="background-image: url(&quot;../../libs/PhotoSwipe/data/15008518202_b016d7d289_m.jpg&amp;size=80&quot;);"></em>
+                <ins class="icon-del"></ins>
+                <ins id="progress2" class="progress">
+                    <!-- <em class="progress-txt">
+                        正在上传中
+                    </em>
+                    <em class="progress-level">
+                        80%
+                    </em> -->
+                </ins>
+            </span>
+        </div>
+    </div>
+    
+</div>
+
+</body>
+<script>
+
+// for(i i<imgcout)
+
+var p = document.getElementById('progress1');
+var p2 = document.getElementById('progress2');
+configStep = [
+    {
+        stage : 20,
+        speed : 0.2
+    },
+    {
+        stage : 40,
+        speed : 0.4
+    },
+    {
+        stage : 50,
+        speed : 0.1
+    },
+    {
+        stage : 80,
+        speed : 0.2
+    },
+    {
+        stage : 98,
+        speed : 0.1
+    }
+]
+
+function PrgressBar(domObj,imgSize,imgUrl){
+    var self = this;
+    self.level = 0; /* 进度百分比 */
+    self.levelSpeed = []; /* 每加1%进度所要时间 */
+    self.levelStep = []; /* 模拟进度改变分段 */
+    self.fileSize = imgSize; /* 图片大小 */
+    self.netSpeed = 100; /* 模拟网速 */
+    self.mockSpeed = self.fileSize / self.netSpeed * 1000; /* 进度所要总时间 */
+    self.refreshBar = function(){
+        setTimeout(function(){
+            domObj.style.width = self.level + "%";
+            if(self.level >= self.levelStep[0]){
+                self.levelSpeed.shift();
+                self.levelStep.shift();
+            }
+            self.level++;
+            if(self.levelSpeed.length){
+                self.refreshBar();
+            }
+        }, self.levelSpeed[0])
+
+    }
+    self.removeBar = function(){
+        console.log(domObj)
+        domObj.parentNode.removeChild(domObj);
+    }
+    for(var i =0 , len = configStep.length; i < len; i++){
+        var dStage = 0;
+        if(i == 0){
+            dStage = configStep[i].stage;
+        }else{
+            dStage = configStep[i].stage - configStep[i - 1].stage;
+        }
+        self.levelSpeed[i] = configStep[i].speed * self.mockSpeed / dStage;
+        self.levelStep[i] = configStep[i].stage;
+    }
+    self.refreshBar();
+}
+
+var pro1 = new PrgressBar(p, 300);
+var pro2 = new PrgressBar(p2, 500);
+
+</script>
+</html>

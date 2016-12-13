@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+/*更改企业*/
+.change-company{
+    position:absolute !important;
+    .modal-btn{
+        position:relative;
+    }
+    .btn-confirm{
+        position: absolute;
+        right:0;
+        top:0;
+        width:50%;
+    }
+    .txt{
+        font-size: 14px;
+        color: #a0a0a0;
+    }
+}

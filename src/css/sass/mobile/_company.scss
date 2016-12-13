@@ -1,0 +1,380 @@
+@charset "UTF-8";
+
+/*加入企业页面*/
+.company-list{
+    background-color: #fff;
+    border-top: 1px solid #e5e5e5;
+    li{
+        position: relative;
+        min-height: 63px;
+        a{
+            display: block;
+        }
+        img{
+            position: absolute;
+            left: 16px;
+            top: 10px;
+            width: 40px;
+            height: 40px;
+        }
+        &:last-child{
+            border-bottom: 1px solid #e5e5e5;
+            .company-detail{
+                border-bottom: none;
+            }
+        }
+    }
+    &.company-selected{
+        img{
+            top: 0;
+            bottom: 0;
+            margin: auto 0;
+        }
+        .company-detail{
+            &:before{
+                content: '.';
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 41px;
+                font-size: 0;
+            }
+            h3{
+                padding: 0;
+                margin: 0;
+                display: inline-block;
+                vertical-align: middle;
+                max-width: 97%;
+            }
+        }
+    }
+}
+
+.no-need{
+    position:relative;
+    top: 15%;
+    font-size: 22px;
+    color: #999;
+    // height: 50px;
+    line-height: 50px;
+    // width: 100%;
+    text-align: center;
+    // margin-top: 35%;
+}
+.company-bottom{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 42px;
+    line-height: 42px;
+    background-color: #f3f4f8;
+    text-align: right;
+    .btn-skip{
+        display: inline-block;
+        padding: 0 22px;
+        height: 100%;
+        font-size: 16px;
+        color: $blue;
+        &:hover{
+            color: $dark-blue;
+        }
+    }
+}
+.company-detail{
+    min-height: 62px;
+    margin-left: 73px;
+    padding:10px 24px 12px 0;
+    border-bottom: 1px solid #e5e5e5;
+    h3{
+        font-size: 18px;
+        color: #333;
+        line-height: 1.2;
+        margin-bottom: 6px;
+    }
+    .invite{
+        span{
+            font-size: 14px;
+        }
+        .s1,.s3{
+            color: #888888;
+        }
+        .s2{
+            color: #00a0e9;
+        }
+    }
+}
+
+/*管理员身份转移页面*/
+.identity{
+    padding-top: 72px;
+    &:before{
+        content: '';
+        display: block;
+        width: 37px;
+        height: 37px;
+        margin: 0 auto;
+        @extend %m-icon;
+        background-position: -30px -60px;
+        background-size: 100px;
+        margin-bottom: 25px;
+    }
+    .p1{
+        font-size: 18px;
+        color: #a0a0a0;
+        padding: 0 26px;
+        text-align: center;
+        margin-bottom: 43px;
+    }
+}
+
+/*创建企业页面*/
+.create-company{
+    textarea{
+        padding: 15px 18px;
+        background-color: #fff;
+        width: 100%;
+        border: none;
+        font-size: 18px;
+        margin-bottom: 100px;
+        color: #535353;
+    }
+}
+
+/*加入企业申请*/
+.apply-for{
+    .fn-tit{
+        position: relative;
+        height: 42px;
+        line-height: 42px;
+        color: #585858;
+        font-size: 14px;
+    }
+}
+.filter{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    font-size: 14px;
+    .btn-filter{
+        position: absolute;
+        top: 0;
+        right: 14px;
+        width: 76px;
+        height: 34px;
+        text-align: center;
+        color: $dark-blue;
+    }
+    &-list{
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: 42px;
+        background-color: #fff;
+        border: 1px solid #e8e8e8;
+        &:before{
+            content: '';
+            position: absolute;
+            z-index: 1;
+            top: -6px;
+            right: 28px;
+            width: 17px;
+            height: 7px;
+            @extend %m-icon2;
+            background-position: -40px -120px;
+            background-size: 100px;
+        }
+       li{
+           height: 44px;
+           line-height: 44px;
+           border-bottom: 1px solid #e8e8e8;
+           a{
+               display: block;
+               color: #585858;
+               padding-left: 8px;
+           }
+           &:first-child{
+               a{
+                color: #59baf5;
+               }
+           }
+           &:last-child{
+               border-bottom: none;
+           }
+       }
+    }
+}
+.apply-list{
+    background-color: #fff;
+    border-top: 1px solid #e5e5e5;
+    li{
+        position: relative;
+        min-height: 63px;
+        img{
+            position: absolute;
+            left: 16px;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            height: 40px;
+            margin: auto 0;
+        }
+        &:last-child{
+            border-bottom: 1px solid #e5e5e5;
+            .detail{
+                border-bottom: none;
+            }
+        }
+    }
+    .detail{
+        margin-left: 73px;
+        padding:10px 127px 12px 0;
+        border-bottom: 1px solid #e5e5e5;
+        h3{
+            font-size: 18px;
+            color: #000;
+            .time{
+                color: #c9c9c9;
+                font-size: 14px;
+                padding-left: 8px;
+                font-weight: normal;
+            }
+        }
+        .p1{
+            font-size: 14px;
+            color: #888;
+        }
+    }
+    .opts{
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        height: 24px;
+        margin: auto 0;
+        padding-right: 12px;
+        .btn-agree,.btn-refuse{
+            float: left;
+            width: 46px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 3px;
+            color: #fff;
+            margin-left: 9px;
+            font-size: 14px;
+        }
+        .btn-agree{
+            background-color: #acbfce;
+            &:hover{
+                background-color: darken(#acbfce,10%);
+            }
+        }
+        .btn-refuse{
+            background-color: $blue;
+            &:hover{
+                background-color: $dark-blue;
+            }
+        }
+        .s1{
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+    }
+}
+
+/* 20151119  */
+.member-list-con{
+    .search-tool{
+        margin:0 18px 10px;
+        position:relative;
+
+        .txt{
+            width:100%;
+            border:1px solid #ddd;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 50px 0 10px;
+            color: #333;
+        }
+
+        .btn-search{
+            position:absolute;
+            right: 0;
+            top:0;
+            width: 48px;
+            height: 38px;
+            overflow: hidden;
+
+            &:after{
+                content:'';
+                position:absolute;
+                top:10px;
+                left:18px;
+                width:18px;
+                height: 18px;
+                @extend %m-icon;
+                background-position: -69px -79px;
+                background-size: 100px;
+            }
+        }
+    }
+
+    dt {
+        font-size:20px;
+        padding-left:18px;
+    }
+
+    dd {
+        margin-bottom:1px;
+        h3{
+            font-size:18px;
+            line-height: 25px;
+            color:#000;
+        }
+        p{
+            font-size:14px;
+            color:#999;
+        }
+    }
+
+    .cell{
+        display: block;
+        background-color:#fff;
+        padding: 4px 18px;
+    }
+
+
+    .fix-tool{
+        position:fixed;
+        right: 15px;
+        bottom: 16%;
+        width:24px;
+        padding: 28px 0 8px;
+        background-color:rgba(0,0,0,0.4);
+        border-radius: 12px;
+        min-height: 80px;
+        max-height: 50%;
+        overflow:auto;
+
+        &:before{
+            content: '';
+            position:absolute;
+            left:4px;
+            top:8px;
+            width:18px;
+            height: 18px;
+            @extend %m-icon;
+            background-position: -69px -100px;
+            background-size: 100px;
+        }
+
+        a{
+            display: block;
+            margin-top:3px;
+            text-align:center;
+            color: #fff;
+            font-size:14px;
+            line-height:25px;
+        }
+    }
+}

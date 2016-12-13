@@ -1,0 +1,532 @@
+<!--2.0 出差申请单 Mobile -->
+<style>
+.layout-bd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+.layout-fd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+</style>
+<div id="cloundOfficeApp">
+
+    <div class="ly-header">
+        <a class="l" @click="prevStep" href="javascript:;" >取消</a>
+        <h2>出差申请单</h2>
+    </div>
+
+    <div class="scroll-bd">
+        <div class="layout-bd">
+            <!-- step1 -->
+            <div v-show="step == 1">
+                <div class="slt-time">
+                    <p class="tit">开始时间</p>
+                    <div id="dStartTime" class="datePlugin"></div>
+                    <p class="tit b">结束时间</p>
+                    <div id="dEndTime" class="datePlugin"></div>
+                </div>
+                <div class="slt-time-hours clx">
+                    <span class="s1">出差天数</span>
+                    <div class="slt-h">
+                        <a href="javascript:;" @click="lAllDay>0.5 && (lAllDay-=0.5)">-</a>
+                        <span class="s2"><i><input type="text" v-model="lAllDay" v-input-timeformat intSize="4" floatSize="1" isFormat=true ></i>天</span>
+                        <a href="javascript:;" @click="lAllDay=lAllDay*1+0.5">+</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /step1 -->
+
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <div class="receipt receipt-create">
+                    <div class="receipt-time-pane">
+                        <div class="time-slt clx">
+                            <span class="s1" v-html="getFormatStr(dStartDate)"></span>
+                            <span class="s2" v-html="getFormatStr(dEndDate)"></span>
+                        </div>
+                        <div class="hours"><span class="num">{{ lAllDay }}</span>天</div>
+                        <a class="btn-edit" @click="gotoStep(1)" href="javascript:;" ></a>
+                    </div>
+                    <div class="receipt-area-pane clx">
+                        <div class="station fl">
+                            <p class="p1"><span class="r">*</span>出发</p>
+                            <a class="p2" @click="setLocation('startPlace')" href="javascript:;">{{startPlace}}</a>
+                        </div>
+                        <a class="btn-toggle" @click="toggleLocation" href="javascript:;"></a>
+                        <div class="station fr">
+                            <p class="p1"><span class="r">*</span>到达</p>
+                            <a class="p2" @click="setLocation('endPlace')" href="javascript:;">{{ endPlace }}</a>
+
+                        </div>
+                    </div>
+                    <div class="single-row clx">
+                        <span class="s1 fl"><i class="r">*</i>预算金额</span>
+                        <span class="s2 fr"><input v-model="price" v-input-timeformat intSize="9" floatSize="2" type="text"/>元</span>
+                    </div>
+
+                    <div class="edit-content">
+                        <div class="txt-con">
+                            <span class="r">*</span>
+                            <textarea class="text-area" placeholder="出差事由" v-model="reason" v-calc-input length="200"></textarea>
+                            <span class="num"><i>{{reason.length}}</i>/200</span>
+                        </div>
+                        <input-keyword
+                            :items='keywordsArr'
+                            :current.sync='reason'>
+                        </input-keyword>
+                        <div class="add-media">
+                            <a class="pic-btn" v-show="uploadPicArr.length < 20" @click="showPhotoPicker = true" href="javascript:;"></a>
+                            <a class="voice-btn" v-show="uploadSoundArr.length == 0" @click="uploadSound" href="javascript:;"></a>
+                        </div>
+                        <div class="receipt-reason">
+                            <audio-player
+                                :allowedit="true"
+                                :items='uploadSoundArr'>
+                            </audio-player>
+                            <photo-slide
+                                :allowedit="true"
+                                :items="uploadPicArr">
+                            </photo-slide>
+                        </div>
+                    </div>
+
+                    <div class="receipt-add">
+                        <h3>抄送:</h3>
+                        <fix-memberpicker
+                            :allowedit="true"
+                            :items="fixSendPersonArr"
+                            @add="addFixSendPerson">
+                        </fix-memberpicker>
+                    </div>
+
+                    <div class="receipt-add audit">
+                        <h3>审批人员：</h3>
+                        <fix-memberpicker
+                            :apply="true"
+                            :allowedit="IsAutoFLow"
+                            :items="fixNextPersonArr"
+                            @add="addApplyPerson">
+                        </fix-memberpicker>
+                    </div>
+                </div>
+            </div>
+            <!-- /step2 -->
+        </div>
+
+        <div class="layout-fd">
+            <!-- step1 -->
+            <div v-show="step == 1">
+                <a class="fn-btn" href="javascript:;" @click="allowStep && gotoStep(2)" :data-action="allowStep?'':'disable'">下一步</a>
+                <input type="hidden" value="时间" id="dStart">
+                <input type="hidden" value="结束时间" id="dEnd">
+            </div>
+            <!-- /step1 -->
+
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
+            </div>
+            <!-- /step2 -->
+        </div>
+    </div>
+
+    <!-- step0 定位 -->
+    <style>
+    .area-select{
+        position:fixed;
+        left:0;
+        top: 45px;
+        bottom:10px;
+        right:0;
+        overflow:auto;
+    }
+    .fn-fix-tool{ top:100px;}
+    .fn-fix-tool a{display:block;margin-top:3px;text-align:center;font-size:12px;line-height:1.4;color:#000}
+    </style>
+    <div class="area-select" name="BodyScroll" v-show="step == 3">
+        <div class="fn-search-tool">
+            <input class="txt" placeholder="搜索" name="txtSearch">
+            <a class="btn-search" href="javascript:;"></a>
+        </div>
+
+        <div class="current-city clx" >
+            <span class="s1">当前定位城市</span>
+            <a class="area-btn" data-action="checked" name="CurrentArea" href="javascript:;"></a>
+        </div>
+
+        <div class="history-city" name="SearchArea" style="display: none;">
+            <h4>搜索城市</h4>
+            <div class="area-btn-box clx"></div>
+        </div>
+
+        <!-- <div class="history-city">
+            <h4>历史城市</h4>
+            <div class="area-btn-box clx" name="HistoryArea"></div>
+        </div> -->
+        <!-- 列表 -->
+        <div name="AllArea"></div>
+
+        <div class="fn-fix-tool" name="ScrollPicker"></div>
+    </div>
+    <!-- /step0 定位 -->
+
+    <!-- 图片组件 -->
+    <photoswipe-gallery></photoswipe-gallery>
+    <!-- /图片组件 -->
+
+
+    <!-- 图片上传组件 -->
+    <upload-images
+        :show.sync="showPhotoPicker"
+        @camera = "pickPhotoByCamera"
+        @album = "pickPhotoByAlbum">
+    </upload-images>
+    <!-- /图片上传组件 -->
+
+    <!-- 消息提示 -->
+    <pop-massege
+        :msg = "massegeText"
+        :type = "massegeType"
+        v-ref:showmsg>
+    </pop-massege>
+    <!-- /消息提示 -->
+
+    <!-- 消息确认弹框 -->
+    <pop-checked
+        :content = "checkContent"
+        :confirmtxt = "checkConfirmTxt"
+        :title = "checkTitle"
+        v-ref:showcheck
+        @confirm = "checkConfirm">
+    </pop-checked>
+    <!-- /消息确认弹框 -->
+
+</div>
+
+<script>
+var confirmPop = {};
+function initConfirmPop(callback){
+    confirmPop.callback = callback;
+}
+
+var originData = {
+    dStartDate : {type:'date', value:''},
+    dEndDate : {type:'date', value:''},
+    lAllDay : 1,
+    reason : '',
+    startPlace : '北京',
+    endPlace : '上海',
+    price : 0,
+    uploadSoundArr : [],
+    uploadPicArr : [],
+    fixSendPersonArr : []
+};
+
+var cloundOfficeApp;
+
+$(document).ready(function() {
+    moment.locale('zh-cn');
+    areaPicker.Init({
+        SelectCallback: function(key){
+            cloundOfficeApp[cloundOfficeApp.pointPlace] = key.Name;
+            cloundOfficeApp.step = 2;
+        },
+        DataUrl: "http://" + document.domain + "/YunBanGong/Handler/Default.ashx",
+        SearchInput: "[name=BodyScroll] [name=txtSearch]",
+        SearchArea: "[name=BodyScroll] [name=SearchArea]",
+        OutputFramework: false
+    });
+});
+
+function getSAbstract(start, end){
+    return start + ' 至 ' + end;
+}
+
+var APP = {
+    init : function(obj){
+        var receiptData = {
+            IsAutoFLow : 0,
+            dStartDate : '',
+            dEndDate : '',
+            lAllDay : 1,
+            reason : '',
+            startPlace : '北京',
+            endPlace : '上海',
+            price : 0,
+            uploadSoundArr : [],
+            uploadPicArr : [],
+            fixSendPersonArr : [],
+            fixNextPersonArr : []
+        };
+
+        if(obj && obj.data){
+            for(var i in receiptData){
+                if(obj.data[i] != undefined){
+                    receiptData[i] = obj.data[i];
+                }
+            }
+        }
+        for(var i in originData){
+            if(originData[i].type){
+                originData[i].value = moment(receiptData[i]).format('YYYY/MM/DD');
+            }else{
+                if(toString.apply(receiptData[i]) === '[object Array]'){
+                    originData[i] = JSON.parse(JSON.stringify(receiptData[i]));
+                }else{
+                    originData[i] = receiptData[i];
+                }
+            }
+        }
+        receiptData.sAbstract = getSAbstract(receiptData.startPlace, receiptData.endPlace)
+        cloundOfficeApp = new Vue({
+            el: '#cloundOfficeApp',
+            data : {
+                step: 1,
+                IsAutoFLow :  receiptData.IsAutoFLow, // 是否自由流程， 1是
+                keywordsArr : ['项目', '会议', '调研', '商务'],
+
+                dStartDate : receiptData.dStartDate,                            // 出差开始时间
+                dEndDate : receiptData.dEndDate,                               // 出差结束时间
+                lAllDay : receiptData.lAllDay,                               // 出差总天数
+                reason : receiptData.reason,                                // 出差原因
+                startPlace : receiptData.startPlace,
+                endPlace : receiptData.endPlace,
+                pointPlace : '',
+                price : receiptData.price,                     // 预算金额
+
+                sAbstract : receiptData.sAbstract,                                          //摘要
+                uploadSoundArr : receiptData.uploadSoundArr,       // 录音上传地址
+                uploadPicArr : receiptData.uploadPicArr,         // 图片上传地址
+                fixSendPersonArr : receiptData.fixSendPersonArr,     // 申请时抄送人
+                fixNextPersonArr : receiptData.fixNextPersonArr,      // 申请时下一个审批人
+                // approvalRecord : [],       // 审批记录
+                // approverSendPerson : [],   // 审批时，抄送人
+                // approverNextPerson : [],   // 审批时，加审的审批人
+                // approverUploadSound : []  // 审批时，上传录音
+                imgProgressAry : [],
+                showPhotoPicker : false,
+                massegeType : 'warn',                                   //消息提示类型
+                massegeText : '警告内容警告内容',                       //消息提示内容
+                checkContent : '',       //消息确认内容
+                checkTitle : '',                                                //消息确认标题
+                checkConfirmTxt : '确定'                                          //消息确认右下按钮名称
+            },
+            watch : {
+                startPlace : function(start){
+                    this.sAbstract = getSAbstract(start, this.endPlace)
+                },
+                endPlace : function(end){
+                    this.sAbstract = getSAbstract(this.startPlace, end)
+                },
+                reason : function(val){
+                    if(val.length > 200){
+                        this.reason = val.substr(0, 200);
+                    }
+                }
+            },
+            computed : {
+                allowStep : function(){
+                    return ( this.lAllDay > 0 && parseInt( moment(this.dEndDate).format("X")) >= parseInt(moment(this.dStartDate).format("X") ));
+                },
+                allowSubmit : function(){
+                    if(this.reason.trim().length < 1){
+                        return false;
+                    }
+                    if(this.price.length < 1){
+                        return false;
+                    }
+                    /*if(this.IsAutoFLow){
+                        // 自由流程
+                        return (this.fixNextPersonArr.length > 0);
+                    }*/
+                    return true;
+                }
+            },
+            mixins : [editVueMixin],
+            methods : {
+                prevStep : function(){
+                    var step = this.step;
+                    if(step > 2){
+                        this.gotoStep(step-1);
+                    }else{
+                        if(!hadDataChange(cloundOfficeApp.$data)){
+                            setCheckPop({
+                                content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
+                                confirm: function(){
+                                    sys_closeActivity();
+                                }
+                            });
+                        }else{
+                            sys_closeActivity();
+                        }
+                    }
+                },
+                gotoStep : function(i){
+                    this.step = i;
+                    if(i == 1){
+                        setTimeout(InitDatepicker, 20)
+                    }
+                },
+
+                setLocation : function(type){
+                    this.step = 3;
+                    this.pointPlace = type;
+                },
+                toggleLocation : function(){
+                    var s = [this.startPlace, this.endPlace];
+                    this.startPlace = s[1];
+                    this.endPlace = s[0]
+                },
+                checkConfirm : function(){
+                    confirmPop.callback && confirmPop.callback();
+                },
+                getFormatStr : function(date){
+                    return moment(date).format('ddd MM-DD');
+                }
+            },
+            ready : function(){
+
+            }
+        });
+
+        if(obj && obj.step){
+            cloundOfficeApp.gotoStep(obj.step);
+        }else{
+            cloundOfficeApp.gotoStep(cloundOfficeApp.step);
+        }
+    }
+}
+
+
+var isDatePickerInit = false;
+function InitDatepicker(){
+    if(isDatePickerInit) return ;
+     //  scrollerDatepicker.GetDateTime();
+     var defStartTime, defEndTime;
+     if(cloundOfficeApp.dStartDate.length){
+         // 已有数据
+         defStartTime = new Date(moment(cloundOfficeApp.dStartDate).format("YYYY/MM/DD"));
+         defEndTime = new Date(moment(cloundOfficeApp.dEndDate).format("YYYY/MM/DD"));
+     }else{
+         // 如果是新建表单
+         var curTime = new Date();
+         defStartTime = new Date(curTime.getFullYear(),curTime.getMonth(),curTime.getDate(),'09','00')
+         defEndTime = new Date(curTime.getFullYear(),curTime.getMonth(),curTime.getDate()+1,'18','00')
+     }
+ 
+     var config = {
+         container: "#dStartTime",
+         defaultDate: defStartTime ,        //默认日期
+         theme: 15,                       //控件样式（1：日期，2：日期+时间）
+         ResultTag:"#dStart",
+         onChangeFun:getTimeDiff
+     };
+     var config2 = {
+         container: "#dEndTime",
+         defaultDate: defEndTime,        //默认日期
+         theme: 15,                       //控件样式（1：日期，2：日期+时间）
+         ResultTag:"#dEnd",
+         onChangeFun:getTimeDiff
+     };
+  
+        if(typeof(CarouselDatepicker) == 'function'){
+            var carouselDatepicker = new CarouselDatepicker({
+            id: "dStartTime",
+            currDate: defStartTime,
+            beginDate: new Date('2010/12/12 10:00'),
+            endDate: new Date('2050/12/12 10:00'),
+            format: 'yyyy/MM/dd',
+            onValueChange: function(value) {
+             cloundOfficeApp.dStartDate = moment(new Date(value)).format("YYYY/MM/DD HH:mm");
+            }           
+        });
+ 
+ 
+        var carouselDatepicker = new CarouselDatepicker({
+            id: "dEndTime",
+            currDate:defEndTime,
+            beginDate: '1990/12/12 10:00',
+            endDate: '2050/12/12 10:00',
+            format: 'yyyy/MM/dd',
+            onValueChange: function(value) {
+                cloundOfficeApp.dEndDate = moment(new Date(value)).format("YYYY/MM/DD HH:mm");
+            }               
+        });
+ 
+        cloundOfficeApp.dStartDate = moment(defStartTime).format("YYYY/MM/DD HH:mm");
+        cloundOfficeApp.dEndDate = moment(defEndTime).format("YYYY/MM/DD HH:mm");
+ 
+     }else{
+ 
+        var scrollerDatepicker = new ScrollerDatepicker();
+        scrollerDatepicker.Init(config);
+        new ScrollerDatepicker().Init(config2);
+        getTimeDiff();
+     }
+ 
+ 
+ 
+ 
+     isDatePickerInit = true;
+ }
+
+function DateDiff(strInterval, dtStart, dtEnd) {
+    if(isNaN(dtStart)) dStart = new Date();
+    if(isNaN(dtEnd)) dtEnd = new Date();
+    switch (strInterval) {
+        case "s":return parseInt((dtEnd - dtStart) / 1000);
+        case "n":return parseInt((dtEnd - dtStart) / 60000);
+        case "h":return parseInt((dtEnd - dtStart) / 3600000);
+        case "d":return parseInt((dtEnd - dtStart) / 86400000);
+        case "w":return parseInt((dtEnd - dtStart) / (86400000 * 7));
+        case "m":return (dtEnd.getMonth()+1)+((dtEnd.getFullYear()-dtStart.getFullYear())*12) - (dtStart.getMonth()+1);
+        case "y":return dtEnd.getFullYear() - dtStart.getFullYear();
+    }
+}
+
+function HourDiff(dtStart, dtEnd){
+    return dtEnd.getHours() - dtStart.getHours();
+}
+
+function getTimeDiff(){
+    var curTime = new Date();
+    var start = new Date(moment(jQuery('#dStart').val()).format("YYYY/MM/DD"));
+    var end = new Date(moment(jQuery('#dEnd').val()).format("YYYY/MM/DD"));
+
+    var diffDay = DateDiff('d',start,end);
+    var diffHour = HourDiff(start,end);
+
+    // cloundOfficeApp.$set('lAllDay', result)
+    // jQuery('#lAllDay').val(result);
+    // jQuery('#lAllDayshow').text(result);
+
+    cloundOfficeApp.dStartDate = moment(start).format("YYYY/MM/DD");
+    cloundOfficeApp.dEndDate = moment(end).format("YYYY/MM/DD");
+    // jQuery('#dEndShow').html(getFormatStr(end));
+    // jQuery('#dStartShow').html(getFormatStr(start));
+}
+
+
+/*function getFormatStr(date){
+    return moment(date).format('ddd MM-DD');
+}*/
+
+initStepBack = 2;
+
+// debug
+if(false){
+    // 创建
+    APP.init()
+}else{
+    // 编辑
+    var initStep = 1;
+    if(initData.HasData){
+        initStep = 2;
+    }
+    APP.init({
+        step : initStep,
+        data : initData
+    })
+}
+</script>

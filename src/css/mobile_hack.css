@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.pswp__button{
+    width:44px;
+    height:44px;
+    position:relative;
+    background:none;
+    cursor:pointer;
+    overflow:visible;
+    -webkit-appearance:none;
+    display:block;
+    border:0;
+    padding:0;
+    margin:0;
+    float:right;
+    opacity:0.75;
+    -webkit-transition: opacity 0.2s;
+            transition: opacity 0.2s;
+    -webkit-box-shadow:none;
+            box-shadow:none;
+}
+
+.pswp__button:focus,
+.pswp__button:hover {
+    opacity:1;
+}
+.pswp__button:active {
+    outline: none;
+    opacity:0.9;
+}
+

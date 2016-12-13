@@ -1,0 +1,580 @@
+﻿<!--2.0 报销申请单 Mobile -->
+<style>
+.layout-bd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+.layout-fd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+</style>
+<div id="cloundOfficeApp">
+
+    <div class="ly-header" v-show="step == 1">
+        <a class="l" @click="closePage" href="javascript:;" >取消</a>
+        <h2>报销申请单</h2>
+    </div>
+
+    <div class="scroll-bd">
+        <div class="layout-bd">
+            <!-- step1 -->
+            <div v-show="step == 1">
+                <div class="receipt receipt-create">
+                    <div class="receipt-account-pane" v-for="row in claimItemArr">
+                        <div class="tit">报销明细{{$index+1}}</div>
+                        <div class="single-row clx">
+                            <span class="s1 fl"><i class="r">*</i>报销项目</span>
+                            <a @click="gotoStep(2, $index, row.claimName)" class="b1 fr" href="javascript:;">{{row.claimName}}</a>
+                        </div>
+                        <div class="single-row clx">
+                            <span class="s1 fl"><i class="r">*</i>报销费用（元）</span>
+                            <span class="s2 fr"><input v-model="row.claimPrice"  v-input-timeformat intSize=9 floatSize=2 isFormat=false  type="text"/>元</span>
+                        </div>
+                        <div class="edit-content">
+                            <div class="txt-con">
+                                <span class="r">*</span>
+                                <textarea class="text-area" v-model="row.claimReason" v-calc-input length="200" placeholder="报销事由"></textarea>
+                                <span class="num"><i>{{row.claimReason.length}}</i>/200</span>
+                            </div>
+                            <input-keyword
+                                :items=' keywordsArr[claimNameArr.indexOf(row.claimName) == -1 ? 5:claimNameArr.indexOf(row.claimName)]'
+                                :current.sync='row.claimReason'>
+                            </input-keyword>
+                        </div>
+                        <div class="opts clx">
+                            <a class="btn-del fl" @click="delClaimItem($index)" v-show="claimItemArr.length > 1" href="javascript:;"></a>
+                            <a class="btn-add fr" v-show="$index+1 == claimItemArr.length" @click="addClaimItem" href="javascript:;">新增明细</a>
+                        </div>
+                    </div>
+                    <div class="single-row total clx">
+                        <span class="s1 fl">费用总计</span>
+                        <span class="s2 fr"><span style="color: #ff6616; font-size: 18px;">{{lAllPrice}}</span> 元</span>
+                    </div>
+                    <div class="edit-content">
+                        <div class="add-media">
+                            <a class="pic-btn" v-show="uploadPicArr.length < 20" @click="showPhotoPicker = true" href="javascript:;"></a>
+                            <a class="voice-btn" v-show="uploadSoundArr.length == 0" @click="uploadSound" href="javascript:;"></a>
+                            <a class="txt-btn" :class="setBillArr.length > 0 ? 'has' : ''" v-show="allowLinkBill" @click="gotoLinkBill" href="javascript:;"></a>
+                        </div>
+
+                        <div class="receipt-reason">
+                            <audio-player
+                                :allowedit="true"
+                                :items='uploadSoundArr'>
+                            </audio-player>
+
+                            <photo-slide
+                                :allowedit="true"
+                                :items="uploadPicArr">
+                            </photo-slide>
+                            <!-- <div class="account" v-show="setBillArr.length > 0 && allowLinkBill">
+                                <div class="item" v-for="row in setBillArr">
+                                    <span class="s1"><i>{{row.price}}</i>元</span>
+                                    <div class="clx">
+                                        <span class="s2 fl">出差单</span>
+                                        <span class="s3 fr">{{row.date}}</span>
+                                    </div>
+                                    <ins @click="delBillArr($index)" class="icon-del"></ins>
+                                </div>
+                            </div> -->
+
+                            <!-- 关联单据 -->
+                            <bill-link
+                            :edite = "true"
+                            :show = "allowLinkBill"
+                            :data = "setBillArr">
+                            </bill-link>
+                            <!-- /关联单据 -->
+                        </div>
+                    </div>
+                    <div class="receipt-add">
+                        <h3>抄送:</h3>
+                        <fix-memberpicker :allowedit="true" :items="fixSendPersonArr" @add="addFixSendPerson"></fix-memberpicker>
+                    </div>
+
+                    <div class="receipt-add audit" >
+                        <h3>审批人员：</h3>
+                        <fix-memberpicker :apply="true" :allowedit="IsAutoFLow" :items="fixNextPersonArr" @add="addApplyPerson"></fix-memberpicker>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /step1 -->
+
+            <!-- step2 -->
+            <div class="ly-header" v-show="step == 2">
+                <a class="btn-back" href="javascript:;" @click="gotoStep(1)"></a>
+                <h2>报销明细{{editNum+1}}</h2>
+            </div>
+            <div class="bills" style="position: relative; padding-top: 50px;" v-show="step == 2">
+                <div class="bills-header" style="position: relative;">
+                    <input class="ipt-txt" @keyup.enter='addType' v-model="inputType" type="text" placeholder="其他（10个字）" maxlength="10" />
+                    <a @click="addType" href="javascript:;">保存并选择</a>
+                </div>
+                <div class="bills-content">
+                    <ul class="bills-list">
+                        <li v-for="row in claimNameArr"><a @click="selectClaimType(row)" :class="{'checked': editName == row }" href="javascript:;">{{row}}</a></li>
+                    </ul>
+                    <h3 v-show="defineClaimNameArr.length">我的添加</h3>
+                    <ul class="bills-list" data-status="reduce" >
+                        <li v-for="row in defineClaimNameArr">
+                            <a @click="selectClaimType(row)" :class="{'checked': editName == row }" href="javascript:;">{{row}}</a>
+                            <a @click="delDefineType($index)" v-if="editName != row" class="btn-del" href="javascript:;"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /step2 -->
+
+            <!-- step3 -->
+            <div class="ly-header" v-if="step == 3">
+                <a class="l" @click="cancelSetBill" href="javascript:;">取消</a>
+                <h2>关联差旅单据</h2>
+                <a class="r2" href="javascript:;" @click="setLinkBill">完成</a>
+            </div>
+            <div style="padding-top:0"class="receipt receipt-create receipt-create-account-list" v-if="step == 3">
+                <div class="fn-search-tool">
+                    <input v-model="searchword" class="txt" placeholder="搜索">
+                    <a class="btn-search" @click="searchBill" href="javascript:;"></a>
+                </div>
+                <ul class="account-list">
+                    <li v-for="row in billArr" @click="toggleChecked($index)">
+                        <div class="avatar">
+                            <ximg :xsrc="getAvatarSrc(row.sPersonCode)"></ximg>
+                            <span class="name">{{row.sPersonName}}</span>
+                        </div>
+                        <div class="result">
+                            <!--
+                               data-action="checked" 选中状态
+                           -->
+                            <a class="fn-checked" :data-action="row.isCheck? 'checked' : ''" href="javascript:;"></a>
+                            <p class="time" v-html="getAskDate(row.dDate)"></p>
+                        </div>
+                        <div class="detail">
+                            <p class="tit">出差申请单</p>
+                            <p class="cell clx">
+                                <span class="fl" ><i>{{row.lAllDay}}</i>天</span>
+                                <span class="fr" ><i>{{row.price}}</i>元</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /step3 -->
+        </div>
+        <div class="layout-fd">
+            <!-- step1 -->
+            <div v-show="step == 1">
+                <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
+            </div>
+            <!-- /step1 -->
+        </div>
+    </div>
+
+    <!-- 图片上传组件 -->
+    <upload-images
+        :show.sync="showPhotoPicker"
+        @camera = "pickPhotoByCamera"
+        @album = "pickPhotoByAlbum">
+    </upload-images>
+    <!-- /图片上传组件 -->
+
+    <!-- 图片组件 -->
+    <photoswipe-gallery></photoswipe-gallery>
+    <!-- /图片组件 -->
+
+    <!-- 消息提示 -->
+    <pop-massege
+        :msg = "massegeText"
+        :type = "massegeType"
+        v-ref:showmsg>
+    </pop-massege>
+    <!-- /消息提示 -->
+
+    <!-- 消息确认弹框 -->
+    <pop-checked
+        :content = "checkContent"
+        :confirmtxt = "checkConfirmTxt"
+        :title = "checkTitle"
+        v-ref:showcheck
+        @confirm = "checkConfirm">
+    </pop-checked>
+    <!-- /消息确认弹框 -->
+
+</div>
+
+<script>
+$(document).ready(function() {
+    moment.locale('zh-cn');
+});
+
+var originData = {
+    billArr : [],
+    claimItemArr : [{"claimPrice":0, "claimName": "交通费", "claimReason":''}],
+    uploadSoundArr : [],
+    uploadPicArr : [],
+    fixSendPersonArr : [],
+    lAllPrice : 0
+};
+
+var confirmPop = {};
+function initConfirmPop(callback){
+    confirmPop.callback = callback;
+}
+
+var cloundOfficeApp;
+
+var APP = {
+    init : function(obj){
+        var receiptData = {
+            IsAutoFLow : 0,
+            billArr : [],
+            lAllPrice : 0,
+            claimItemArr : [{"claimPrice":0, "claimName": "交通费", "claimReason":''}],
+            uploadSoundArr : [],
+            uploadPicArr : [],
+            fixSendPersonArr : [],
+            fixNextPersonArr : []
+        };
+
+        if(obj && obj.data){
+            if(obj.data.claimItemArr){
+                obj.data.claimItemArr = JSON.parse(obj.data.claimItemArr)
+            }
+            for(var i in receiptData){
+                if(obj.data[i] != undefined){
+                    receiptData[i] = obj.data[i];
+                }
+            }
+        }
+        for(var i in originData){
+            if(originData[i].type){
+                originData[i].value = receiptData[i];
+            }else{
+                if(toString.apply(receiptData[i]) === '[object Array]'){
+                    originData[i] = JSON.parse(JSON.stringify(receiptData[i]));
+                }else{
+                    originData[i] = receiptData[i];
+                }
+            }
+        }
+        cloundOfficeApp = new Vue({
+            el: '#cloundOfficeApp',
+            data : {
+                step: 1,
+                IsAutoFLow :  receiptData.IsAutoFLow, // 是否自由流程， 1是
+                claimNameArr : ["交通费", "住宿费", "通讯费", "招待费", "采购费", "其他"],
+                defineClaimNameArr : [],
+                keywordsArr : {
+                    0 : ['差旅'],
+                    1 : ['差旅'],
+                    2 : ['活动经费', '差旅', "业务招待"],
+                    3 : ['活动经费', "业务招待"],
+                    4 : ['办公用品'],
+                    5 : ['活动经费', '差旅', "业务招待", '办公用品']
+                },
+                editNum : 0,
+                editName : '',
+                inputType : '',
+                sAbstract : '',                                          //摘要
+                searchword : '',                                        //搜索关键字
+                billArr : receiptData.billArr,     //搜索结果数组
+                chooseBillArr : [],                                     //缓存数组
+                setBillArr : [],//确定后数据数组
+
+                lAllPrice : receiptData.lAllPrice,                       // 费用总计
+                claimItemArr : receiptData.claimItemArr,           // 报销明细
+                uploadSoundArr : receiptData.uploadSoundArr|| [],       // 录音上传地址
+                uploadPicArr : receiptData.uploadPicArr|| [],         // 图片上传地址
+                fixSendPersonArr : receiptData.fixSendPersonArr|| [],     // 申请时抄送人
+                fixNextPersonArr : receiptData.fixNextPersonArr|| [],      // 申请时下一个审批人
+                // approvalRecord : [],       // 审批记录
+                // approverSendPerson : [],   // 审批时，抄送人
+                // approverNextPerson : [],   // 审批时，加审的审批人
+                // approverUploadSound : []  // 审批时，上传录音
+                imgProgressAry : [],
+                showPhotoPicker : false,
+                massegeType : 'warn',                                   //消息提示类型
+                massegeText : '警告内容警告内容',                       //消息提示内容
+                checkContent : '',       //消息确认内容
+                checkTitle : '',                                                //消息确认标题
+                checkConfirmTxt : '确定'                                          //消息确认右下按钮名称
+            },
+            watch : {
+                claimItemArr : {
+                    handler:function(items){
+                        var s = 0;
+                        if(items.length){
+                            items.forEach(function(row){
+                                s = (s * 100 + 100 * Number(row.claimPrice)) / 100;
+                                if(row.claimReason.length > 200){
+                                    row.claimReason = row.claimReason.substr(0, 200);
+                                }
+                            });
+                        }
+                        this.lAllPrice = s;
+                    },
+                    deep:true
+                },
+                lAllPrice : function(val){
+                    this.sAbstract = "共 " + val + " 元";
+                }
+            },
+            computed : {
+                computedAllPrice : function(){
+                    var price = 0;
+                    for(var i = 0; i < this.claimItemArr.length; i ++){
+                        price = (this.claimItemArr[i].claimPrice * 100 + price * 100) / 100;
+                    }
+                    return this.lAllPrice = price
+                },
+
+                allowStep : function(){
+                    return ( this.lAllTime > 0 && ( moment(this.dEndDate).format("X") > moment(this.dStartDate).format("X") ) );
+                },
+                allowSubmit : function(){
+                    for(var i=0, len= this.claimItemArr.length; i<len; i++){
+                        var row = this.claimItemArr[i];
+                        if(!(row.claimReason.trim().length && row.claimPrice>0)){
+                            return false;
+                        }
+                    }
+                    /*if(this.IsAutoFLow){
+                        // 自由流程
+                        return (this.fixNextPersonArr.length > 0);
+                    }*/
+                    return true;
+                },
+                //是否显示关联单据按钮
+                allowLinkBill : function(){
+                    var self = this;
+                    var len = self.claimItemArr.length;
+                    var allow = false;
+                    for(var i = 0; i < len; i ++){
+                        if(["交通费", "住宿费", "通讯费", "招待费"].indexOf(self.claimItemArr[i].claimName) != -1){
+                            allow = true;
+                        }
+                    }
+                    return allow;
+                }
+            },
+            mixins : [editVueMixin],
+            methods : {
+                prevStep : function(){
+                    var self = this;
+                    var step = self.step;
+                    if(step > 1){
+                        self.gotoStep(step-1);
+                    }
+                },
+                closePage : function(){
+                    if(!hadDataChange(cloundOfficeApp.$data)){
+                        setCheckPop({
+                            content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
+                            confirm: function(){
+                                sys_closeActivity();
+                            }
+                        });
+                    }else{
+                        sys_closeActivity();
+                    }
+                },
+                //点击保存并添加
+                addType : function(){
+                    if(this.inputType.trim().length == 0){
+                        return false;
+                    }
+
+                    if(this.claimNameArr.indexOf(this.inputType) != -1 && this.defineClaimNameArr.indexOf(this.inputType) != -1){
+                        this.claimItemArr[this.editNum].claimName = this.inputType;
+                        return this.gotoStep(1);
+                    }
+
+                    this.defineClaimNameArr.unshift(this.inputType);
+                    this.claimItemArr[this.editNum].claimName = this.inputType;
+                    if(this.defineClaimNameArr.length >= 16){
+                        this.defineClaimNameArr.shift();
+                    }
+                    this.gotoStep(1);
+                },
+                //删除自己添加类型
+                delDefineType : function(i){
+                    this.defineClaimNameArr.splice(i, 1);
+                },
+                //点击选择类型
+                selectClaimType : function(name){
+                    this.claimItemArr[this.editNum].claimName = name;
+                    this.gotoStep(1);
+                },
+                gotoStep : function(i, x, name){
+                    this.step = i;
+                    this.editNum = x;
+                    this.editName = name;
+                },
+
+                delClaimItem : function(i){
+                    var self = this;
+                    if(self.claimItemArr[i].claimReason.trim().length != 0){
+                        this.showCheckPop();
+                        self.checkContent = '<p class="mb10 tc">是否确定要删除报销明细'+ (i + 1) +'</p>'
+                        initConfirmPop(function(){
+                            self.claimItemArr.splice(i,1);
+                        });
+                    }else{
+                        self.claimItemArr.splice(i,1);
+                    }
+                },
+                //新增明细
+                addClaimItem : function(){
+                    this.claimItemArr.push({"claimPrice": 0, "claimName": "交通费", "claimReason": ""})
+                },
+                whichType : function(i){
+                    if(this.claimItemArr[this.editNum].claimID == i){
+                        return true;
+                    }
+                },
+                checkConfirm : function(){
+                    confirmPop.callback && confirmPop.callback();
+                },
+                //取消关联单据
+                cancelSetBill : function(){
+                    this.chooseBillArr = [];
+                    this.billArr = [];
+                    this.gotoStep(1);
+                },
+                //关联单据点击切换选中状态
+                toggleChecked : function(i){
+                    var self = this;
+                    var row = self.billArr;
+                    var temp = [];
+                    if(row[i].isCheck){
+                        for(var n = 0, l = self.setBillArr.length; n < l; n ++){
+                            temp[n] = self.setBillArr[n].AutoCode;
+                        }
+                        if(temp.indexOf(row[i].AutoCode) == -1){
+                            row[i].isCheck = false;
+                            for(var j = 0, len = self.chooseBillArr.length; j < len; j ++){
+                                if(self.chooseBillArr[j].AutoCode == row[i].AutoCode){
+                                    self.chooseBillArr.splice(j, 1);
+                                    break;
+                                }
+                            }
+                        }else{
+                            setCheckPop({
+                                "content" : "此单据已被选取，不可取消"
+                            });
+                        }
+                    }else{
+                        row[i].isCheck = true;
+                        this.chooseBillArr.push(row[i]);
+                    }
+                },
+                //关联单据确定
+                setLinkBill : function(){
+                    this.setBillArr = this.setBillArr.concat(this.chooseBillArr);
+                    this.chooseBillArr = [];
+                    this.billArr = [];
+                    this.gotoStep(1);
+                },
+                //搜索关联单据
+                searchBill : function(){
+                    var word = this.searchword;
+                    // this.searchResult();
+                    sys_GetFormTripsByPerson(word, this.searchResult);
+                },
+                searchResult : function(data){
+                    var self = this;
+                    data = data.Source;
+                    var len = data.length;
+                    var temp = [];
+                    var temp2 = [];
+                    for(var i = 0, l = self.chooseBillArr.length; i < l; i ++){
+                        temp[i] = self.chooseBillArr[i].AutoCode;
+                    }
+                    for(var i = 0, l = self.setBillArr.length; i < l; i ++){
+                        temp2[i] = self.setBillArr[i].AutoCode;
+                    }
+                    for(var i = 0; i < len; i ++){
+                        if(temp.indexOf(data[i].AutoCode) == -1 && temp2.indexOf(data[i].AutoCode) == -1){
+                            data[i].isCheck = false;
+                        }else{
+                            data[i].isCheck = true;
+                        }
+                    }
+                    self.billArr = data.concat([]);
+                },
+                //关联单据获取时间格式
+                getAskDate : function(date){
+                    return moment(date).format("MM-DD HH:mm");
+                },
+                //删除已关联单据
+                delBillArr : function(i){
+                    this.setBillArr.splice(i, 1);
+                },
+                gotoLinkBill : function(){
+                    this.gotoStep(3);
+                    // this.searchResult();
+                    // this.billArr = this.setBillArr;
+                    sys_GetFormTripsByPerson('', this.searchResult);
+                },
+                //判断是否有关联单据
+                hasLinkBill : function(){
+                    sys_MapFormTripToClaim(this.setBillArr);
+                },
+
+                priceFormat : function(opts){
+                    var self = opts.obj;
+                    if(opts.e && opts.e == 'focus'){
+                        if(self[opts.type] == 0){
+                            self[opts.type] = '';
+                        }
+                        return;
+                    }
+                    if(opts.e && opts.e == 'blur'){
+                        var temp = parseInt(self[opts.type]*1000)/1000
+                        self[opts.type] = parseFloat(temp);
+                        return;
+                    }
+
+
+                    var temp = self[opts.type].toString().replace(/[^\d.]/g, '');
+
+                    self[opts.type] = FE_Util.formatNumber({
+                        val : temp,
+                        intSize : 9,
+                        floatSize: 2
+                    });
+                }
+            },
+            ready : function(){
+              
+            }
+        });
+
+        if(obj && obj.step){
+            cloundOfficeApp.gotoStep(obj.step);
+        }else{
+            cloundOfficeApp.gotoStep(cloundOfficeApp.step);
+        }
+    }
+}
+
+initStepBack = 1;
+
+// debug
+if(false){
+    // 创建
+    APP.init()
+}else{
+    // 编辑
+    var initStep = 1;
+    if(initData.HasData){
+        initStep = 1;
+    }
+    APP.init({
+        step : initStep,
+        data : initData
+    })
+}
+</script>

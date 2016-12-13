@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+// media query
+// @example:
+// 示例scss:
+//   .foo{
+//     width: 500px;
+//     @include breakpoint($mq-s){
+//       width: 200px;
+//     }
+//   }
+$mq-s: max-width 640px;  //small
+$mq-n: 640px 1000px;  // normal
+$mq-l: 1000px;  //large
+$mq-h: 1600px;  //huge
+
+
+// color
+$c-b: #333;    // base
+$c-l: #999;    // lighter
+$c-d: #000;    // dark
+$blue: #59baf5;
+$light-blue: #a6d7f6;
+$dark-blue: #00a0e9;
+$yellow: #ff6307;
+
+
+// font size
+$fz-s: 12px;  // small
+$fz-n: 14px;  // noraml
+$fz-m: 16px;  // medium
+$fz-l: 18px;  // large
+$fz-h: 20px;  // huge
+
+
+// sprite
+// @example:
+//   @extend %icon;
+$global_sprite:
+  (icon, '../img/mobile/logo.png')
+  (m-icon, '../img/mobile/icon.png')
+  (m-icon2, '../img/mobile/icon2.png')
+  (m-icon3, '../img/mobile/icon3.png')
+  (m-icon4, '../img/mobile/icon4.png')
+;
+
+
+// 强制换行
+%wordbreak{
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+
+// 文字超出显示省略号
+%text-overflow{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+
+// 设置透明度 0~100
+@mixin opacity($op){
+  opacity:$op/100;
+  filter:alpha(opacity=$op);
+}
+
+
+// each sprite
+@each $spName, $spSrc in $global_sprite {
+  %#{$spName}{
+    background-image:url($spSrc);
+    background-repeat:no-repeat;
+  }
+}

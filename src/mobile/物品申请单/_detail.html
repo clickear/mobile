@@ -1,0 +1,21 @@
+        <!-- <div class="type type-goods">
+             <span class="t"><i>{{goodsArr.length}}</i>条</span>
+             <p class="d"><ins></ins>{{useTypeName}}</p>
+         </div>   --> 
+        <p class="type_row"><span class="lab">申请类型：</span>{{useTypeName}}</p>
+    </div>
+</div>
+
+<div class="receipt">
+    <div class="receipt-header">
+        <div class="receipt-goods-con">
+            <div class="item" v-for="row in goodsArr">
+                <span class="capsule ">{{$index+1}}</span>
+                <span>{{row.goodsName}}</span>
+                <span class="s2 fr">{{row.goodsItemNum}}</span>
+            </div>
+        </div>
+        <div class="receipt-reason">
+            <p class="lab">申请理由：</p>
+            <h3>{{reason}}</h3>
+            

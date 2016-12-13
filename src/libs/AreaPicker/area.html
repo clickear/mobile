@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>出发</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="favicon.png" rel="icon">
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/AreaPicker.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+           var config = {
+                SelectCallback: null,
+                DataUrl: "http://" + document.domain + "/YunBanGong/Handler/Default.ashx",
+                SearchInput: "[name=BodyScroll] [name=txtSearch]",
+                SearchArea: "[name=BodyScroll] [name=SearchArea]",
+                OutputFramework: false
+            };
+            areaPicker.Init(config);
+        });
+    </script>
+</head>
+<body>
+    <div class="area-select" name="BodyScroll">
+        <div class="fn-search-tool">
+            <input class="txt" placeholder="搜索" name="txtSearch">
+            <a class="btn-search" href="javascript:;"></a>
+        </div>
+        <div class="current-city clx" >
+            <span class="s1">当前定位城市</span>
+            <a class="area-btn" data-action="checked" name="CurrentArea" href="javascript:;"></a>
+        </div>
+        <div class="history-city" name="SearchArea" style="display: none;">
+            <h4>搜索城市</h4>
+            <div class="area-btn-box clx">
+            </div>
+        </div>
+
+<!--         <div class="history-city">
+            <h4>历史城市</h4>
+            <div class="area-btn-box clx" name="HistoryArea">
+            </div>
+        </div> -->
+        <!-- 列表 -->
+        <div name="AllArea">
+        </div>
+        <div class="fn-fix-tool" name="ScrollPicker">
+        </div>
+    </div>
+</body>
+</html>

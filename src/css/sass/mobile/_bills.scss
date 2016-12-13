@@ -1,0 +1,158 @@
+@charset "utf-8";
+
+/*
+*  报销项目页面
+*/
+.bills{
+    &-header{
+        height: 48px;
+        line-height: 47px;
+        margin-bottom: 17px;
+        border-bottom: 1px solid #cccdd0;
+        .ipt-txt{
+            width: 100%;
+            padding: 9px 94px 9px 14px;
+            height: 48px;
+            border: none;
+            color: #000;
+            line-height: 20px;
+        }
+        a{
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0 14px;
+            color: #50b1f4;
+            font-size: 14px;
+        }
+    }
+    &-content{
+        h3{
+            height: 38px;
+            line-height: 38px;
+            padding: 0 14px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+    }
+}
+.bills-list{
+    border-bottom: 1px solid #e8e9e9;
+    background-color: #fff;
+    li{
+        position: relative;
+        height: 60px;
+        line-height: 59px;
+        font-size: 17px;
+        border-top: 1px solid #e8e9e9;
+        a{
+            padding: 0 14px;
+            display: block;
+            color: #000;
+            &.checked{
+                position: relative;
+                &:after{
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    right: 16px;
+                    margin: auto 0;
+                    width: 21px;
+                    height: 21px;
+                    @extend %m-icon2;
+                    background-size: 100px;
+                    background-position: -30px -170px;
+                }
+            }
+        }
+        .btn-del{
+            position: absolute;
+            top: 0;
+            right: 0;
+            &:after{
+                content: '';
+                display: inline-block;
+                vertical-align: -4px;
+                width: 21px;
+                height: 21px;
+                @extend %m-icon2;
+                background-size: 100px;
+                background-position: -60px -200px;
+            }
+        }
+    }
+//    &[data-status="reduce"]{
+//
+//    }
+}
+
+/*地区选择*/
+.area-select{
+    font-size: 17px;
+    .fn-search-tool{
+        margin: 7px;
+    }
+    .current-city{
+        background-color: #fff;
+        border-top: 1px solid #dedfe2;
+        height: 48px;
+        line-height: 46px;
+        padding: 0 14px;
+        .s1{
+            float: left;
+            color: #5e5f56;
+        }
+        .area-btn{
+            float: right;
+            margin-top: 10px;
+        }
+    }
+    .history-city{
+        background-color: #fff;
+        border-top: 1px solid #dedfe2;
+        padding: 18px 14px 3px;
+        h4{
+            color: #5e5f56;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+    }
+    .area-btn{
+        float: left;
+        padding: 0 19px;
+        height: 25px;
+        line-height: 25px;
+        background-color: #e2eaf0;
+        border-radius: 13px;
+        color: #5e5f56;
+        font-size: 15px;
+        margin-right: 6px;
+        margin-bottom: 15px;
+        &[data-action="checked"]{
+            color: #fff;
+            background-color: #2c9ae5;
+        }
+    }
+    .area-btn-box{
+        margin-right: -6px;
+    }
+    dl{
+        padding: 0 14px;
+        background-color: #fff;
+        dt{
+            margin-bottom: 13px;
+            color: #000;
+            position: relative;
+            text-transform: capitalize;
+            &:after{
+                content: '';
+                position: absolute;
+                left: 30px;
+                right: 0;
+                top: 15px;
+                border-top: 1px dashed #7f7f7f;
+            }
+        }
+    }
+}

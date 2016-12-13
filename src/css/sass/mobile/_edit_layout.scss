@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.layout-bd{
+	position:relative;
+    width: 100%;
+    min-height: 100%;
+    padding: 0 0 35px;
+    z-index:0;
+}
+.layout-fd{
+	position:relative;
+    margin-top: -35px;
+    z-index:0;
+}
+.datePlugin {
+    display: block;
+    width: 100%;
+    height: 150px;
+    margin: auto;
+    /* border: solid 1px #ff0000; */
+}

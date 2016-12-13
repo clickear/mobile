@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>审批列表</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="favicon.png" rel="icon">
+<link rel="stylesheet" href="../css/mobile.css">
+<link rel="stylesheet" href="../css/mobile_hack.css">
+</head>
+<body>
+    <div class="examine ui-tab">
+        <ul class="ui-tab-nav tab-nav-2 clx">
+            <li class="active"><a href="javascript:;">待审<span class="fn-badge">20</span></a></li>
+            <li><a href="javascript:;">已审</a></li>
+        </ul>
+        <div class="ui-tab-content">
+            <div class="examine-filter-box">
+                <span class="s1">全部</span>
+                <div class="examine-filter">
+                    <a class="btn-filter" href="javascript:;"></a>
+                    <!--
+                        .list.on 展开状态
+                    -->
+                    <ul class="list">
+                        <li class="checked"><a href="javascript:;">全部</a></li>
+                        <li><a href="javascript:;">近三天</a></li>
+                        <li><a href="javascript:;">近一周</a></li>
+                        <li><a href="javascript:;">近一月</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <!--
+                .tab-pane.active 显示状态
+            -->
+            <div class="tab-pane active">
+                <ul class="examine-list">
+                    <!--
+                                data-action="process" 待审，审核中状态
+                                data-action="success" 成功状态
+                                data-action="reject"  未通,已拒绝过状态
+                                data-action="revoke"  已撤销状态
+                            -->
+                    <li  data-action="process">
+                        <div class="avatar">
+                            <img src="../img/pic/user.png" alt=""/>
+                            <span class="name">杨小雨</span>
+                        </div>
+                        <div class="detail">
+                            <p class="matter">物品申请单</p>
+                            <!--
+                                data-type="leave" 请假申请单
+                                data-type="business" 出差申请单
+                                data-type="out" 外出申请单
+                                data-type="goods" 物品申请单
+                            -->
+                            <span class="d-time" data-type="leave">年假<i>8</i>小时</span>
+                        </div>
+                        <div class="result">
+
+                            <p class="txt">待审...</p>
+                            <p class="time">11:20</p>
+                        </div>
+                    </li>
+                    <!--
+                               data-action="process" 待审，审核中状态
+                               data-action="success" 成功状态
+                               data-action="reject"  未通,已拒绝过状态
+                               data-action="revoke"  已撤销状态
+                           -->
+                    <li data-action="success">
+                        <div class="avatar">
+                            <img src="../img/pic/user.png" alt=""/>
+                            <span class="name">杨小雨</span>
+                        </div>
+                        <div class="detail">
+                            <p class="matter">物品申请单<span class="s1">(加急)</span></p>
+                            <!--
+                               data-type="leave" 请假申请单
+                               data-type="business" 出差申请单
+                               data-type="out" 外出申请单
+                               data-type="goods" 物品申请单
+                           -->
+                            <span class="d-time" data-type="goods">年假<i>8</i>小时</span>
+                        </div>
+                        <div class="result">
+
+                            <p class="txt">已通过</p>
+                            <p class="time">11:20</p>
+                        </div>
+                    </li>
+                    <!--
+                                data-action="process" 待审，审核中状态
+                                data-action="success" 成功状态
+                                data-action="reject"  未通,已拒绝过状态
+                                data-action="revoke"  已撤销状态
+                            -->
+                    <li  data-action="revoke">
+                        <div class="avatar">
+                            <img src="../img/pic/user.png" alt=""/>
+                            <span class="name">杨小雨</span>
+                        </div>
+                        <div class="detail">
+                            <p class="matter">物品申请单<span class="s1">(加急)</span></p>
+                            <!--
+                               data-type="leave" 请假申请单
+                               data-type="business" 出差申请单
+                               data-type="out" 外出申请单
+                               data-type="goods" 物品申请单
+                           -->
+                            <span class="d-time" data-type="out">年假<i>8</i>小时</span>
+                        </div>
+                        <div class="result">
+
+                            <p class="txt">已撤销</p>
+                            <p class="time">11:20</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--
+               .tab-pane.active 显示状态
+           -->
+            <div class="tab-pane">
+                <div class="no-result">
+                    <img src="../img/mobile/no-result.png" alt=""/>
+                    <p>暂无数据！</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--弹窗-->
+    <div class="ui-btm-modal hide">
+        <div class="btm-modal-content btm-modal-examine">
+            <p class="p2">杨欣雨的请假单</p>
+            <a href="javascript:;">已读</a>
+            <a href="javascript:;">全部已读</a>
+        </div>
+        <a class="btm-modal-btn gray" href="javascript:;">返回</a>
+    </div>
+    <!--/弹窗-->
+
+    <!--提示弹窗-->
+    <!--
+        data-action="warn" 警告状态
+        data-action="success" 成功状态
+    -->
+    <div class="fn-tip3-modal" data-action="warn">
+        <p class="txt">
+            <ins class="tip-icon"></ins>
+            <span>您查看的单据不存在!</span>
+        </p>
+    </div>
+    <!--/提示弹窗-->
+</body>
+
+</html>

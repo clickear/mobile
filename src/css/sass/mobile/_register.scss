@@ -1,0 +1,343 @@
+@charset "UTF-8";
+
+/*注册页面*/
+
+.register{ padding-top: 32px; }
+.register-step{
+    margin-bottom: 13px;
+    &-item{
+        position: relative;
+        float: left;
+        width: 33%;
+        text-align: center;
+        .mark{
+            position: relative;
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            padding: 1px;
+            border: 2px solid $blue;
+            border-radius: 50%;
+            i{
+                display: inline-block;
+                width: 19px;
+                height: 19px;
+                background-color: transparent;
+                border-radius: 50%;
+            }
+            &:before{
+                content: '';
+                position: absolute;
+                z-index: -1;
+                left: -4px;
+                top: -4px;
+                bottom: -4px;
+                right: -4px;
+                background-color: #f3f4f8;
+                border-radius: 50%;
+            }
+        }
+        &:before,
+        &:after{
+            content: '';
+            position: absolute;
+            z-index: -2;
+            top: 12px;
+            height: 1px;
+            background-color: $light-blue;
+        }
+        &:before{
+            left: 0;
+            right: 50%;
+        }
+        &:after{
+            left: 50%;
+            right: 0;
+        }
+        &:first-child{
+            &:before{
+                display: none;
+            }
+        }
+        &:last-child{
+            &:after{
+                display: none;
+            }
+            .mark i{
+                @extend %m-icon;
+                background-position: 0 -20px;
+                background-size: 100px;
+            }
+        }
+    }
+    &[data-status="step1"]{
+        li:first-child{
+            .mark i{
+                background-color: $blue;
+            }
+        }
+    }
+    &[data-status="step2"]{
+        li:nth-child(2){
+            .mark i{
+                background-color: $blue;
+            }
+        }
+    }
+    &[data-status="step3"]{
+        li:last-child{
+            .mark i{
+                background-color: $blue;
+                background-position: -20px -20px;
+            }
+        }
+    }
+}
+.btn-register{
+   @extend .fn-btn;
+}
+.ipt{
+    position: relative;
+    &:before{
+        content: '';
+        position: absolute;
+        left: 19px;
+        top: 15px;
+        width: 20px;
+        height: 20px;
+        @extend %m-icon;
+        background-size: 100px;
+    }
+    input{
+        width: 100%;
+        height: 50px;
+        padding: 0 64px 0 43px;
+        border: none;
+        font-size: 16px;
+        background-color: #fff;
+        color: #707070;
+    }
+    .opts-icon{
+        position: absolute;
+        right: 12px;
+        top: 0;
+    }
+    .icon-del,.icon-see,.icon-error{
+        display: inline-block;
+        box-sizing: content-box;
+        width: 30px;
+        height: 50px;
+        text-align: center;
+        &:before{
+            content: '';
+            display: inline-block;
+            margin-top: 15px;
+            width: 20px;
+            height: 20px;
+            @extend %m-icon;
+            background-position: -80px 0;
+            background-size: 100px;
+        }
+    }
+    .icon-see{
+        &:before{
+            background-position: -60px 0;
+        }
+        &.on{
+            &:before{
+                background-position: -83px -40px;
+            }
+        }
+    }
+    .icon-error{
+        height: 50px;
+        &:before{
+            background-position: -60px -20px;
+        }
+    }
+    .code-time{
+        position: absolute;
+        right: 12px;
+        top: 13px;
+        min-width: 66px;
+        height: 25px;
+        padding: 0 5px;
+        line-height: 23px;
+        border-radius: 5px;
+        background-color: $blue;
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        &[data-action="disable"]{
+            background-color: #c4c9d7;
+        }
+    }
+    &-phone{
+
+        &:before{
+            background-position: 0 0;
+        }
+
+
+    }
+    &-code{
+
+        &:before{
+            background-position: -40px -20px;
+        }
+
+    }
+    &-user{
+
+        &:before{
+            background-position: -40px 0;
+        }
+    }
+    &-pwd{
+        &:before{
+            background-position: -20px 0;
+        }
+    }
+}
+
+.register-content{
+    .step-text{
+        height: 66px;
+        text-align: center;
+        font-size: 22px;
+        p{
+            line-height: 1.4;
+        }
+    }
+    .ipt{
+        padding:0 12px;
+        background-color: #fff;
+        input{
+            padding-left: 31px;
+        }
+        &:first-child{
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 20px;
+        }
+        &:nth-child(2){
+            border-top: 1px solid #e5e5e5;
+
+        }
+        &:nth-child(2),&:nth-child(3){
+            position: relative;
+            input{
+                border-bottom: 1px solid #eee;
+            }
+        }
+        &:nth-child(4){
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 20px;
+        }
+        &-phone{
+            position: relative;
+            input{
+                padding-right: 130px;
+            }
+            .opts-icon{
+                right: 86px;
+            }
+
+        }
+    }
+
+
+    .rule{
+        text-align: center;
+        font-size: 14px;
+        color: #b0b4c0;
+        margin-bottom: 15px;
+        a{
+            text-decoration: underline;
+            color: $blue;
+            &:hover{
+                color: $dark-blue;
+            }
+        }
+    }
+    &-step3{
+        .ipt-user{
+            margin-bottom: 0;
+            border-bottom: 1px solid #f3f4f8;
+        }
+    }
+}
+
+
+
+/*登录页面*/
+.login-form{
+    padding-top: 34px;
+    .ipt{
+        input{
+            background-color: #294262;
+            color: #fff;
+        }
+    }
+    .ipt-phone{
+        &:before{
+            background-position: 0 -40px;
+        }
+        input{
+            border-bottom: 1px solid #3f5572;
+        }
+    }
+    .ipt-pwd{
+        margin-bottom: 15px;
+        &:before{
+            background-position: -20px -40px;
+        }
+        .icon-see{
+            background-position: -60px -40px;
+        }
+    }
+
+
+}
+.login-block{
+    padding: 10px 12px;
+    font-size: 14px;
+    .l-pwd{
+        color: $blue;
+        &:hover{
+            color: $dark-blue;
+        }
+    }
+    .l-register{
+        color: #fff;
+        &:hover{
+            color: $dark-blue;
+        }
+    }
+}
+
+/*找回密码*/
+.retrieve{
+    padding-top: 35px;
+    h2{
+        font-size: 24px;
+        color: #abafbc;
+        margin-bottom: 40px;
+    }
+    &-form{
+       .ipt{
+           margin-bottom: 10px;
+           &:last-of-type{
+               margin-bottom: 20px;
+           }
+       }
+       .ipt-code {
+           input {
+               padding-right: 138px;
+           }
+           .opts-icon {
+               right: 86px;
+           }
+       }
+    }
+}

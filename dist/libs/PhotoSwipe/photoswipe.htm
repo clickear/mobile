@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="wf-myriadpro-n4-active wf-myriadpro-n6-active wf-active" prefix="og: http://ogp.me/ns#" debug="true" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+
+    <title>修改后</title>
+
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+
+    <link href="css/photoswipe.css" rel="stylesheet">
+    <link href="css/default-skin.css" rel="stylesheet">
+
+    <script src="js/photoswipe.js"></script>
+    <script src="js/photoswipe-ui-default.js"></script>
+
+
+
+
+
+</head>
+
+<body>
+    <!-- <div><span onclick="Init()">点击</span></div> -->
+    <!-- <div data-pswp-uid="1" id="demo-test-gallery" class="demo-gallery">
+        <a href="15008518202_b016d7d289_m.jpg" data-size="1600x1600" data-med="15008518202_b016d7d289_m.jpg" data-med-size="1024x1024" data-author="作者" class="demo-gallery__img--main">
+            <img src="15008518202_b016d7d289_m.jpg" alt="">
+            <figure>提示信息</figure>
+        </a>
+        <a href="https://farm4.staticflickr.com/3920/15008465772_d50c8f0531_h.jpg" data-size="1600x1067" data-med="https://farm4.staticflickr.com/3920/15008465772_383e697089_b.jpg" data-med-size="1024x683" data-author="Thomas Lefebvre">
+            <img src="15008465772_383e697089_m.jpg" alt="">
+            <figure>It's a dummy caption. He who searches for meaning here will be sorely disappointed.</figure>
+        </a>
+        <a href="https://farm6.staticflickr.com/5584/14985868676_b51baa4071_h.jpg" data-size="1600x1067" data-med="https://farm6.staticflickr.com/5584/14985868676_4b802b932a_b.jpg" data-med-size="1024x683" data-author="Michael Hull">
+            <img src="14985868676_4b802b932a_m.jpg" alt="">
+            <figure>Dummy caption. It's Greek to you. Unless, of course, you're Greek, in which case, it really makes no sense.</figure>
+        </a>
+        <a href="https://farm4.staticflickr.com/3902/14985871946_24f47d4b53_h.jpg" data-size="1600x1067" data-med="https://farm4.staticflickr.com/3902/14985871946_86abb8c56f_b.jpg" data-med-size="1024x683" data-author="Ales Krivec">
+            <img src="14985871946_86abb8c56f_m.jpg" alt="">
+            <figure>This is dummy caption. It is not meant to be read.</figure>
+        </a>
+        <a href="https://farm6.staticflickr.com/5591/15008867125_b61960af01_h.jpg" data-size="1600x1068" data-med="https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg" data-med-size="1024x683" data-author="Samuel Rohl">
+            <img src="15008867125_68a8ed88cc_m.jpg" alt="">
+            <figure>This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.</figure>
+        </a>
+        <a href="https://farm6.staticflickr.com/5591/15008867125_b61960af01_h.jpg" data-size="1600x1068" data-med="https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg" data-med-size="1024x683" data-author="Samuel Rohl">
+            <img src="15008867125_68a8ed88cc_m.jpg" alt="">
+            <figure>This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.</figure>
+        </a>
+    </div>
+ -->
+
+    <div id="gallery" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)" value="asdf"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip">
+                    </div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function Init() {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+            var items = [];
+
+            item = {
+                src: "data/15008518202_b016d7d289_m.jpg",
+                w: 1600,
+                h: 1600,
+                author: "作者"
+            };
+            items.push(item);
+            item = {
+                src: "data/15008465772_383e697089_m.jpg",
+                w: 1600,
+                h: 1600,
+                author: "作者"
+            };
+            items.push(item);
+            item = {
+                src: "data/14985868676_4b802b932a_m.jpg",
+                w: 1600,
+                h: 1600,
+                author: "作者"
+            };
+            items.push(item);
+            item = {
+                src: "data/15008867125_68a8ed88cc_m.jpg",
+                w: 1600,
+                h: 1600,
+                author: "作者"
+            };
+            items.push(item);
+
+            var options = {
+                index: 0,
+                galleryUID: 1
+            };
+            gallery2 = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+            gallery2.init();
+        }
+        Init()
+    </script>
+
+</body>
+</html>

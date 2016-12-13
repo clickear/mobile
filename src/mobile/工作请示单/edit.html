@@ -1,0 +1,256 @@
+﻿<!--2.0 工作请示单 Mobile  -->
+<style>
+.layout-bd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+.layout-fd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+</style>
+<div id="cloundOfficeApp">
+
+    <div class="ly-header">
+        <a class="l" @click="close" href="javascript:;" >取消</a>
+        <h2>工作请示单</h2>
+    </div>
+    <div class="scroll-bd">
+        <div class="layout-bd">
+            <div class="receipt receipt-create">
+                <div class="edit-content">
+                    <div class="txt-tit"><span class="r">*</span><input type="text" placeholder="主题（20个字）" v-model="title" maxlength="20" /></div>
+                    <div class="txt-con">
+                        <span class="r">*</span>
+                        <textarea class="text-area" placeholder="请示原因" v-model="content" v-calc-input length="200"></textarea>
+                        <span class="num"><i>{{content.length}}</i>/200</span>
+                    </div>
+                    <div class="add-media">
+                        <a class="pic-btn" v-show="uploadPicArr.length < 20" @click="showPhotoPicker = true" href="javascript:;"></a>
+                        <a class="voice-btn" v-show="uploadSoundArr.length == 0" @click="uploadSound" href="javascript:;"></a>
+                    </div>
+                    <div class="receipt-reason">
+                        <audio-player :allowedit="true" :items='uploadSoundArr'></audio-player>
+                        <photo-slide :allowedit="true" :items="uploadPicArr"></photo-slide>
+                    </div>
+                </div>
+
+                <div class="single-row clx">
+                    <span class="s1 fl">紧急</span>
+                    <!--
+                    data-action="off" 表示关的状态
+                    -->
+                    <a class="fn-btn-toggle fr" @click="toggleArgent" :data-action="urgent?'':'off'" href="javascript:;"></a>
+                </div>
+                <div class="receipt-add">
+                    <h3>抄送:</h3>
+                    <fix-memberpicker :allowedit="true" :items="fixSendPersonArr" @add="addFixSendPerson"></fix-memberpicker>
+                </div>
+
+                <div class="receipt-add audit">
+                    <h3>审批人员：</h3>
+                    <fix-memberpicker :apply="true" :allowedit="IsAutoFLow" :items="fixNextPersonArr" @add="addApplyPerson"></fix-memberpicker>
+                </div>
+
+            </div>
+        </div>
+        <div class="layout-fd">
+            <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
+        </div>
+    </div>
+
+    <!-- 图片组件 -->
+    <photoswipe-gallery></photoswipe-gallery>
+    <!-- /图片组件 -->
+
+    <!-- 图片上传组件 -->
+    <upload-images
+        :show.sync="showPhotoPicker"
+        @camera = "pickPhotoByCamera"
+        @album = "pickPhotoByAlbum">
+    </upload-images>
+    <!-- /图片上传组件 -->
+
+    <!-- 消息提示 -->
+    <pop-massege
+        :msg = "massegeText"
+        :type = "massegeType"
+        v-ref:showmsg>
+    </pop-massege>
+    <!-- /消息提示 -->
+
+    <!-- 消息确认弹框 -->
+    <pop-checked
+        :content = "checkContent"
+        :confirmtxt = "checkConfirmTxt"
+        :title = "checkTitle"
+        v-ref:showcheck
+        @confirm = "checkConfirm">
+    </pop-checked>
+    <!-- /消息确认弹框 -->
+
+</div>
+
+<script>
+$(document).ready(function() {
+    moment.locale('zh-cn');
+});
+
+var confirmPop = {};
+function initConfirmPop(callback){
+    confirmPop.callback = callback;
+}
+
+var originData = {
+    title : '',
+    content : '',
+    urgent : 0,
+    uploadSoundArr : [],
+    uploadPicArr : [],
+    fixSendPersonArr : []
+};
+
+var cloundOfficeApp;
+
+var getSAbstract = function(tit, urgent){
+    if(urgent == 1){
+        urgent = "紧急 ";
+    }else{
+        urgent = "不紧急 ";
+    }
+    return urgent + tit ;
+}
+
+var APP = {
+    init : function(obj){
+        var receiptData = {
+            IsAutoFLow : 0,
+            title : '',
+            content : '',
+            urgent : 0,
+            uploadSoundArr : [],
+            uploadPicArr : [],
+            fixSendPersonArr : [],
+            fixNextPersonArr : []
+        };
+
+        if(obj && obj.data){
+            for(var i in receiptData){
+                if(obj.data[i] != undefined){
+                    receiptData[i] = obj.data[i];
+                }
+            }
+        }
+        for(var i in originData){
+            if(originData[i].type){
+                originData[i].value = receiptData[i];
+            }else{
+                if(toString.apply(receiptData[i]) === '[object Array]'){
+                    originData[i] = JSON.parse(JSON.stringify(receiptData[i]));
+                }else{
+                    originData[i] = receiptData[i];
+                }
+            }
+        }
+        cloundOfficeApp = new Vue({
+            el: '#cloundOfficeApp',
+            data : {
+                IsAutoFLow :  receiptData.IsAutoFLow, // 是否自由流程， 1是
+                title : receiptData.title,                       // 主题
+                content : receiptData.content,                       // 申请内容
+                urgent : receiptData.urgent,                       // 是否紧急，1是
+                sAbstract : '',                                          //摘要
+                uploadSoundArr : receiptData.uploadSoundArr,       // 录音上传地址
+                uploadPicArr : receiptData.uploadPicArr,         // 图片上传地址
+                fixSendPersonArr : receiptData.fixSendPersonArr,     // 申请时抄送人
+                fixNextPersonArr : receiptData.fixNextPersonArr,      // 申请时下一个审批人
+                // approvalRecord : [],       // 审批记录
+                // approverSendPerson : [],   // 审批时，抄送人
+                // approverNextPerson : [],   // 审批时，加审的审批人
+                // approverUploadSound : []  // 审批时，上传录音
+                imgProgressAry : [],
+                showPhotoPicker : false,
+                massegeType : 'warn',                                   //消息提示类型
+                massegeText : '警告内容警告内容',                       //消息提示内容
+                checkContent : '<p class="mb10 tc">确认退出当前页面</p>',       //消息确认内容
+                checkTitle : '',                                                //消息确认标题
+                checkConfirmTxt : '确定'                                          //消息确认右下按钮名称
+            },
+            watch : {
+                title : function(val){
+                    this.sAbstract = getSAbstract(val, this.urgent);
+                },
+                urgent : function(val){
+                    this.sAbstract = getSAbstract(this.title, val);
+                },
+                content : function(val){
+                    if(val.length > 200){
+                        this.content = val.substr(0, 200);
+                    }
+                }
+            },
+            computed : {
+                allowSubmit : function(){
+                    if(this.content.trim().length < 1){
+                        return false;
+                    }
+                    if(this.title.trim().length < 1){
+                        return false;
+                    }
+                    /*if(this.IsAutoFLow){
+                        // 自由流程
+                        return (this.fixNextPersonArr.length > 0);
+                    }*/
+                    return true;
+                }
+            },
+            mixins : [editVueMixin],
+            methods : {
+                close : function(){
+                    if(!hadDataChange(cloundOfficeApp.$data)){
+                        setCheckPop({
+                            content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
+                            confirm: function(){
+                                sys_closeActivity();
+                            }
+                        });
+                    }else{
+                        sys_closeActivity();
+                    }
+                },
+                toggleArgent : function(){
+                    if(this.urgent){
+                        this.urgent = 0;
+                    }else{
+                        this.urgent = 1;
+                    }
+                },
+                checkConfirm : function(){
+                    confirmPop.callback && confirmPop.callback();
+                }
+            },
+            ready : function(){
+
+            }
+        });
+    }
+}
+
+initStepBack = 3;
+
+// debug
+if(false){
+    // 创建
+    APP.init()
+}else{
+    // 编辑
+    var initStep = 1;
+    if(initData.HasData){
+        initStep = 3;
+    }
+    APP.init({
+        step : initStep,
+        data : initData
+    })
+}
+</script>

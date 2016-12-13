@@ -1,0 +1,339 @@
+<!--1.0 请假单 Mobile detail -->
+<div id="cloundOfficeApp">
+    
+    <div class="ly-header">
+    <a class="btn-back" @click="cancelStep" href="javascript:;"></a>
+    <h2>{{titleLabel}}</h2>
+    <a class="r2" v-show="step == 4" @click="submitReminder" href="javascript:;">提交</a>
+    <!-- <a class="btn-msg" href="javascript:;"></a> -->
+    <a v-show="step == 3" class="r" @click="setFixSendPerson" href="javascript:;" >确定</a>
+</div>
+
+<!-- 显示详情 -->
+<template v-if="step==0">
+    <div class="scroll-bd">
+    <div class="receipt-relate">
+        <div style="position: relative; padding: 6px 7px 0;">
+            <div class="avatar">
+                <!--用户头像组件-->
+                <ximg @click="lookPerson(sPersonCode)" :xsrc = "getAvatarSrc(sPersonCode)"></ximg>
+                <!--/用户头像组件-->
+            </div>
+            <p class="name">{{ sPersonName }}</p>
+            <!-- 单据状态 -->
+            <receipt-status
+                :enable = "Enable"
+                :viewtype = "ViewType"
+                :flowstate = "FlowState"
+                :approvalstate = "ApprovalState">
+            </receipt-status>
+            <!-- /单据状态 -->
+
+
+    
+            <!-- <div class="type">
+            <p id="title_name">{{kqItemName}}</p>
+            <span class="t"><i>{{lAllTime}}</i>工时</span>
+            <p class="d"><ins></ins>{{dStartDate}} 至 {{dEndDate}}</p>
+        </div> -->
+        <p class="type_row"><span class="lab">请假类型：</span>{{kqItemName}}</p>
+        <p class="type_row"><span class="lab">请假时长：</span>{{lAllTime}}工时</p>
+        <p class="type_row"><span class="lab">请假时间：</span><span class="t">{{dStartDate}} 至 {{dEndDate}}</span></p>
+    </div>
+</div>
+<div class="receipt">
+    <div class="receipt-header">
+        <div class="receipt-reason">
+            <p class="lab">请假理由：</p>
+            <h3>{{reason}} </h3>
+
+            
+
+    
+                    <!-- 录音 -->
+                <audio-player
+                :allowedit= "false"
+                :status = "stop"
+                :items= "uploadSoundArr">
+                </audio-player>
+                <!-- /录音 -->
+
+                <!-- 关联单据 -->
+                <bill-link
+                :edite = "false"
+                :show = "allowLinkBill"
+                :data = "billArr">
+                </bill-link>
+                <!-- /关联单据 -->
+
+                <!-- 图片 -->
+                <photo-slide
+                    :resize="true"
+                    :allowedit="false"
+                    :items="uploadPicArr">
+                </photo-slide>
+                <!-- /图片 -->
+                
+
+                <!-- 数据统计列表 -->
+                <div class="statistics" v-show="showStatic && ViewType == 2" :data-action="closeStatic ? 'active' : ''">
+                    <!-- 数据统计按钮 -->
+                    <a class="btn-st" @click="toggleStatic" href="javascript:;">{{staticList.title}}</a>
+                    <!-- /数据统计按钮 -->
+                    <div class="statistics-content ">
+                        <table class="s-table">
+                            <colgroup>
+                                <col width="50px">
+                                <col width="50px">
+                                <col width="50px">
+                                <col width="50px">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td class="t2" v-for="row in staticList.nameX">
+                                        {{row}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="t1" v-for="row in staticList.column">
+                                        <!-- <div v-show="!row[0]" class="bar" :style="{height: row}"></div> -->
+                                        <div v-if="row[0]" class="bar" :style="{height: row[0]}"></div>
+                                        <div v-if="row[1]" class="bar2" :style="{height: row[1]}"></div>
+                                    </td>
+                                </tr>
+                                <tr v-for="row in staticList.content">
+                                    <td>{{row.nameY}}</td>
+                                    <td class="t3" v-for="cell in row.data">{{cell}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="no-data hide">暂无统计数据</div>
+                    </div>
+                </div>
+                <!-- /数据统计列表 -->
+            </div>
+
+        </div>
+
+        <div class="receipt-content">
+            <!-- 审批记录 -->
+            <record-items
+                :viewtype = 'ViewType'
+                :items = 'approvalRecord'
+                :donotremind = false
+                :donotlookperson = false
+                :flowstate = "FlowState">
+            </record-items>
+            <!-- /审批记录 -->
+
+            <div class="receipt-add" v-if="fixSendPersonArr.length>0 || ViewType == 1">
+                <h3 v-if="!(fixSendPersonArr.length == 0 && FlowState > 1)">抄送对象:</h3>
+                <div class="avatar" v-for="row in fixSendPersonArr">
+                    <ximg @click="lookPerson(row.code)" :xsrc="getAvatarSrc(row.code)"></ximg>
+                    <span class="name">{{ row.name }}</span>
+                </div>
+
+                <template v-if="FlowState == 1 && ViewType == 1 ">
+                <a class="fn-btn-add" href="javascript:;" @click="addFixSendPerson"></a>
+                <a v-show="fixSendPersonArr.length != 0" class="fn-btn-minus" href="javascript:;" @click="gotoDelSendPerson"></a>
+                </template>
+
+            </div>
+        </div>
+
+       
+    </div>
+</div>
+
+ <!-- 详情操作 -->
+<detail-operation
+    :enable="Enable"
+    :viewtype="ViewType"
+    :flowstate="FlowState"
+    @modify='receiptModify'
+    @approval='gotoApproval'>
+</detail-operation>
+<!-- /详情操作 -->
+        
+</template>
+<!-- /显示详情 -->
+
+<!-- 审批 -->
+<approval-component
+    :step = 'step'
+    :sremark.sync = 'sRemark'
+    :isautoflow = 'IsAutoFLow'
+    :approversendperson = 'approverSendPerson'
+    :approvernextperson = 'approverNextPerson'
+    :approveruploadsound = 'approverUploadSound'
+    :isdontneedsend=false
+    @submit='doApproval'
+    @uploadsound = 'uploadSound'
+    @addapproversend="addApproverSend"
+    @addapprovernext="addApproverNext">
+</approval-component>
+<!-- /审批 -->
+
+<!-- 删除抄送 -->
+<delfixsend-component
+    :step="step"
+    :delsendpersonarr = 'delSendPersonArr'>
+</delfixsend-component>
+<!-- /删除抄送 -->
+
+<!-- 催审 -->
+<reminder-component
+    :step = 'step'
+    :personid = 'sReminderId'
+    :personname = 'sReminderName'
+    :remindertype.sync = 'LSendType'
+    :remindercontent.sync = 'SContent'>
+</reminder-component>
+<!-- /催审 -->
+
+<!-- 图片组件 -->
+<photoswipe-gallery></photoswipe-gallery>
+<!-- /图片组件 -->
+
+<!-- 消息提示 -->
+<pop-massege
+    :msg = "massegeText"
+    :type = "massegeType"
+    v-ref:showmsg>
+</pop-massege>
+<!-- /消息提示 -->
+
+<!-- 消息确认弹框 -->
+<pop-checked
+    :content = "checkContent"
+    :confirmtxt = "checkConfirmTxt"
+    :title = "checkTitle"
+    v-ref:showcheck
+    @confirm = "checkConfirm">
+</pop-checked>
+<!-- /消息确认弹框 -->
+</div>
+<script type="text/javascript">$(document).ready(function() {
+    moment.locale('zh-cn');
+    Global.isDetail = true;
+});
+
+var cloundOfficeApp;
+var confirmPop = {};
+function initConfirmPop(callback){
+    confirmPop.callback = callback;
+}
+var APP = {
+    init : function(obj){
+        var receiptData = {};
+        if(obj.data){
+            receiptData = obj.data;
+        }
+        cloundOfficeApp = new Vue({
+            el:"#cloundOfficeApp",
+            data:{
+                titleArr : ['请假申请单', '同意', '拒绝', '编辑抄送人', '催审'],
+                step : 0, // 0基础详情; 1审批同意; 2审批拒绝; 3删除抄送; 4催审
+                Enable : receiptData.Enable, // 是否可编辑
+                ViewType : receiptData.ViewType || 0,
+                FlowState : receiptData.FlowState,
+                IsAutoFLow :  receiptData.IsAutoFLow || 0, // 是否自由流程， 1是
+                ApprovalState : receiptData.ApprovalState, // 审批状态
+
+                sPersonCode : receiptData.sPersonCode || 0,
+                sPersonName : receiptData.sPersonName || '',
+                sRemark : '',
+
+                SAddress : "" ,   //     语音文件地址
+                sReminderId : 0, // 催审人员ID
+                sReminderName : '', // 催审人员名字
+                LSendType : 0, // 催审类别 0 短信 1 IM
+                SContent : '', // 催审内容
+
+                kqItemName : receiptData.kqItemName || '',
+                kqItemId : receiptData.kqItemId || 0,                               // 请假单类型id
+                dStartDate : moment(receiptData.dStartDate).format("YYYY-MM-DD HH:mm") || '',// 请假单开始时间
+                dEndDate : moment(receiptData.dEndDate).format("YYYY-MM-DD HH:mm") || '',// 请假单结束时间
+                lAllTime : receiptData.lAllTime || 0,                               // 请假总时长
+                reason : receiptData.reason || '',                       // 请假原因
+                submitApprovalState : 1,    // 提交审批的类型，1通过 2拒绝
+                uploadSoundArr : receiptData.uploadSoundArr || [],                        // 录音上传地址
+                uploadPicArr : receiptData.uploadPicArr || [],                          // 图片上传地址
+                approvalRecord : receiptData.approvalRecord || [],                        // 审批记录
+                fixSendPersonArr : receiptData.fixSendPersonArr || [],                      // 申请时抄送人
+                fixNextPersonArr : receiptData.fixNextPersonArr || [],                      // 申请时下一个审批人
+                approverSendPerson : receiptData.approverSendPerson || [],                    // 审批时，抄送人
+                approverNextPerson : receiptData.approverNextPerson || [],                    // 审批时，加审的审批人
+                approverUploadSound : receiptData.approverUploadSound || [],                    // 审批时，上传录音
+                delSendPersonArr : [],     // 删除时抄送人
+                FormAuxiliaryStatisticalList : receiptData.FormAuxiliaryStatisticalList || [], //统计列表原始数据
+                staticList : receiptData.staticList || {}, //统计列表对象
+                showStatic : true, //显示统计列表
+                closeStatic : false, //收起统计列表
+                massegeType : 'warn',                                   //消息提示类型
+                massegeText : '警告内容警告内容',                       //消息提示内容
+                checkContent : '<p class="mb10 tc">确认退出当前页面</p>',       //消息确认内容
+                checkTitle : '',                                                //消息确认标题
+                checkConfirmTxt : '确定'                                           //消息确认右下按钮名称
+            },
+
+            computed : {
+                titleLabel : function(){
+                    return this.titleArr[this.step];
+                },
+                LPerson : function(){
+                    // 催审人员列表
+                    return [this.sReminderId]
+                },
+                staticList : function(){
+                    var arr = {};
+                    var data= this.FormAuxiliaryStatisticalList;
+                    var len = data.length;
+                    var total = 0;
+                    arr.title = "请假统计";
+                    arr.content = [{"nameY": "次数", "data": []},{"nameY": "总计时数", "data": []}];
+                    arr.nameX = [];
+                    arr.column = [];
+                    for(var i = 0; i < len; i ++){
+                        arr.nameX[i] = data[i].Month + "月";
+                        if(data[i].Times == 0){
+                            arr.content[0].data[i] = "无";
+                        }else{
+                            arr.content[0].data[i] = data[i].Times + "次";
+                        }
+                        if(data[i].Days == 0){
+                            arr.content[1].data[i] = "无";
+                        }else{
+                            arr.content[1].data[i] = data[i].Days + "天";
+                        }
+                        total += data[i].Days;
+                    }
+                    for(var i = 0; i < len; i ++){
+                        var arry = [];
+                        arry[0] = parseInt(data[i].Days * 100 / total) + "%";
+                        arry[1] = '';
+                        arr.column[i] = arry;
+                    }
+                    return arr;
+                }
+            },
+            ready : function(){
+                if(this.FlowState == 1){
+                    this.closeStatic = true;
+                }else{
+                    this.closeStatic = false;
+                }
+            },
+            methods : { checkConfirm : function(){
+                    confirmPop.callback && confirmPop.callback();
+            }},
+            mixins : [detailVueMixin]
+        });
+    }
+}
+
+APP.init({
+    data : initData
+})</script>

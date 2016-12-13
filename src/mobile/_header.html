@@ -1,0 +1,27 @@
+<div class="ly-header">
+    <a class="btn-back" @click="cancelStep" href="javascript:;"></a>
+    <h2>{{titleLabel}}</h2>
+    <a class="r2" v-show="step == 4" @click="submitReminder" href="javascript:;">提交</a>
+    <!-- <a class="btn-msg" href="javascript:;"></a> -->
+    <a v-show="step == 3" class="r" @click="setFixSendPerson" href="javascript:;" >确定</a>
+</div>
+
+<!-- 显示详情 -->
+<template v-if="step==0">
+    <div class="scroll-bd">
+    <div class="receipt-relate">
+        <div style="position: relative; padding: 6px 7px 0;">
+            <div class="avatar">
+                <!--用户头像组件-->
+                <ximg @click="lookPerson(sPersonCode)" :xsrc = "getAvatarSrc(sPersonCode)"></ximg>
+                <!--/用户头像组件-->
+            </div>
+            <p class="name">{{ sPersonName }}</p>
+            <!-- 单据状态 -->
+            <receipt-status
+                :enable = "Enable"
+                :viewtype = "ViewType"
+                :flowstate = "FlowState"
+                :approvalstate = "ApprovalState">
+            </receipt-status>
+            <!-- /单据状态 -->

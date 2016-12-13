@@ -1,0 +1,339 @@
+﻿<!--2.0 物品申请单 Mobile  -->
+<style>
+.layout-bd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+.layout-fd{
+    POSITION: relative;
+    z-INDEX:0;
+}
+</style>
+<div id="cloundOfficeApp">
+    <!-- step1 -->
+    <div class="ly-header" v-show="step == 1">
+        <a class="l" @click="closePage" href="javascript:;">取消</a>
+        <h2>物品申请单</h2>
+    </div>
+    <div class="receipt-home receipt-home-fix" v-show="step == 1">
+        <div class="receipt-menu-box">
+            <ul class="receipt-menu clx receipt-menu-goods">
+                <li v-for="row in useItemArr"><a @click="selectType($index)" href="javascript:;"><ins :class="'i'+($index+8)" ></ins>{{row}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- /step1 -->
+
+    <div class="ly-header" v-show="step > 1">
+        <a class="l" @click="closePage" href="javascript:;" >取消</a>
+        <h2>物品申请单</h2>
+    </div>
+
+    <div class="scroll-bd" v-show="step > 1">
+        <div class="layout-bd">
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <div class="receipt receipt-create" style="position:relative;">
+                    <div class="receipt-goods-pane">
+                        <div class="tit">{{useTypeName}}<a class="btn-edit fr" @click="gotoStep(1)" href="javascript:;"></a></div>
+                        <div class="con">
+                            <div class="single-row">
+                                <span class="s1"><i class="r">*</i>申领物品</span>
+                                <a class="btn-add" @click="addGoods" href="javascript:;"></a>
+                            </div>
+                            <div class="add-goods" v-for="row in goodsArr">
+                                <input class="i1" v-model="row.goodsName" placeholder="物品名称/单位" maxlength="20" type="text"/>
+                                <input class="i2" v-model="row.goodsItemNum" v-input-timeformat intSize=9 floatSize=2 isFormat=false  placeholder="数量" type="text"/>
+                                <a class="btn-minus" @click="deleteGood($index)" href="javascript:;" v-show="goodsArr.length > 1"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="edit-content">
+                        <div class="txt-con">
+                            <textarea class="text-area" placeholder="申请原因" v-model="reason" v-calc-input length="200"></textarea>
+                            <span class="num"><i>{{reason.length}}</i>/200</span>
+
+                            <input-keyword :items='keywordsArr' :current.sync='reason'></input-keyword>
+                        </div>
+                        <div class="add-media">
+                            <a class="pic-btn" v-show="uploadPicArr.length < 20" @click="showPhotoPicker = true" href="javascript:;"></a>
+                            <a class="voice-btn" v-show="uploadSoundArr.length == 0" @click="uploadSound" href="javascript:;"></a>
+                        </div>
+                        <div class="receipt-reason">
+                            <audio-player :allowedit="true" :items='uploadSoundArr'></audio-player>
+                            <photo-slide :allowedit="true" :items="uploadPicArr"></photo-slide>
+                        </div>
+                    </div>
+
+                    <div class="receipt-add">
+                        <h3>抄送:</h3>
+                        <fix-memberpicker :allowedit="true" :items="fixSendPersonArr" @add="addFixSendPerson"></fix-memberpicker>
+                    </div>
+
+                    <div class="receipt-add audit" >
+                        <h3>审批人员：</h3>
+                        <fix-memberpicker :apply = 'true' :allowedit="IsAutoFLow" :items="fixNextPersonArr" @add="addApplyPerson"></fix-memberpicker>
+                    </div>
+                </div>
+            </div>
+            <!-- /step2 -->
+        </div>
+        <div class="layout-fd">
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
+            </div>
+            <!-- /step2 -->
+        </div>
+    </div>
+
+    <!-- 图片上传组件 -->
+    <upload-images
+        :show.sync="showPhotoPicker"
+        @camera = "pickPhotoByCamera"
+        @album = "pickPhotoByAlbum">
+    </upload-images>
+    <!-- /图片上传组件 -->
+
+    <!-- 图片组件 -->
+    <photoswipe-gallery></photoswipe-gallery>
+    <!-- /图片组件 -->
+
+    <!-- 消息提示 -->
+    <pop-massege
+        :msg = "massegeText"
+        :type = "massegeType"
+        v-ref:showmsg>
+    </pop-massege>
+    <!-- /消息提示 -->
+
+    <!-- 消息确认弹框 -->
+    <pop-checked
+        :content = "checkContent"
+        :confirmtxt = "checkConfirmTxt"
+        :title = "checkTitle"
+        v-ref:showcheck
+        @confirm = "checkConfirm">
+    </pop-checked>
+    <!-- /消息确认弹框 -->
+
+
+</div>
+
+<script>
+$(document).ready(function() {
+    moment.locale('zh-cn');
+});
+
+var confirmPop = {};
+function initConfirmPop(callback){
+    confirmPop.callback = callback;
+}
+
+var originData = {
+    useType : -1,
+    goodsArr : [{"goodsName": "", "goodsItemNum": 1}],
+    reason : '',
+    uploadSoundArr : [],
+    uploadPicArr : [],
+    fixSendPersonArr : []
+};
+
+var cloundOfficeApp;
+
+var APP = {
+    init : function(obj){
+        var receiptData = {
+            IsAutoFLow : 0,
+            useType : -1,
+            goodsArr : [{"goodsName": "", "goodsItemNum": 1}],
+            reason : '',
+            uploadSoundArr : [],
+            uploadPicArr : [],
+            fixSendPersonArr : [],
+            fixNextPersonArr : []
+        };
+
+        if(obj && obj.data){
+            if(obj.data.goodsArr){
+                obj.data.goodsArr = JSON.parse(obj.data.goodsArr);
+            }
+            for(var i in receiptData){
+                if(obj.data[i] != undefined){
+                    receiptData[i] = obj.data[i];
+                }
+            }
+        }
+        for(var i in originData){
+            if(originData[i].type){
+                originData[i].value = receiptData[i];
+            }else{
+                if(toString.apply(receiptData[i]) === '[object Array]'){
+                    originData[i] = JSON.parse(JSON.stringify(receiptData[i]));
+                }else{
+                    originData[i] = receiptData[i];
+                }
+            }
+        }
+        cloundOfficeApp = new Vue({
+            el: '#cloundOfficeApp',
+            data : {
+                step: 1,
+                IsAutoFLow :  receiptData.IsAutoFLow, // 是否自由流程， 1是
+                useItemArr : ['固定资产', '办公使用', '其他'],
+                useType : receiptData.useType,                       // 申请类型
+                useTypeName:'固定资产',
+                sAbstract : receiptData.reason,                                          //摘要
+                reason : receiptData.reason,                       // 申请理由
+                goodsArr : receiptData.goodsArr,                   // 物品明细
+                uploadSoundArr : receiptData.uploadSoundArr,       // 录音上传地址
+                uploadPicArr : receiptData.uploadPicArr,         // 图片上传地址
+                fixSendPersonArr : receiptData.fixSendPersonArr,     // 申请时抄送人
+                fixNextPersonArr : receiptData.fixNextPersonArr,      // 申请时下一个审批人
+                // approvalRecord : [],       // 审批记录
+                // approverSendPerson : [],   // 审批时，抄送人
+                // approverNextPerson : [],   // 审批时，加审的审批人
+                // approverUploadSound : []  // 审批时，上传录音
+                imgProgressAry : [],
+                showPhotoPicker : false,
+                massegeType : 'warn',                                   //消息提示类型
+                massegeText : '警告内容警告内容',                       //消息提示内容
+                checkContent : '<p class="mb10 tc">确认退出当前页面</p>',       //消息确认内容
+                checkTitle : '',                                                //消息确认标题
+                checkConfirmTxt : '确定'                                          //消息确认右下按钮名称
+
+            },
+            watch : {
+                useType : function(val){
+                    this.useTypeName = this.useItemArr[val];
+                },
+                reason : function(val){
+                    this.sAbstract = val;
+                    if(val.length > 200){
+                        this.reason = val.substr(0, 200);
+                    }
+                }
+            },
+
+            computed : {
+                allowStep : function(){
+                    return ( this.lAllTime > 0 && ( moment(this.dEndDate).format("X") > moment(this.dStartDate).format("X") ) );
+                },
+                allowSubmit : function(){
+                    if(this.goodsArr.length < 1){
+                        return false;
+                    }
+
+                    for(var i=0, len= this.goodsArr.length; i<len; i++){
+                        var row = this.goodsArr[i];
+                        if(!(row.goodsName.trim().length && row.goodsItemNum>0)){
+                            return false;
+                        }
+                    }
+
+                    /*if(this.IsAutoFLow){
+                        // 自由流程
+                        return (this.fixNextPersonArr.length > 0);
+                    }*/
+                    return true;
+                }
+            },
+            mixins : [editVueMixin],
+            methods : {
+                prevStep : function(){
+                    var step = this.step;
+                    if(step > 0){
+                        this.gotoStep(step-1);
+                    }
+                },
+                gotoStep : function(i){
+                    this.step = i;
+                },
+                selectType :function(i){
+                    this.useType = i;
+                    this.gotoStep(2);
+                },
+
+                //添加物品
+                addGoods : function(){
+                    this.goodsArr.push({
+                        "goodsName" : "",
+                        "goodsItemNum" : 1
+                    })
+                },
+
+                //删除物品
+                deleteGood : function(i){
+                    if (i !== -1) {
+                        this.goodsArr.splice(i, 1)
+                    }
+                },
+                checkConfirm : function(){
+                    confirmPop.callback && confirmPop.callback();
+                },
+                closePage : function(){
+                    if(!hadDataChange(cloundOfficeApp.$data)){
+                        setCheckPop({
+                            content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
+                            confirm: function(){
+                                sys_closeActivity();
+                            }
+                        });
+                    }else{
+                        sys_closeActivity();
+                    }
+                },
+
+                priceFormat : function(opts){
+                    var self = opts.obj;
+                    if(opts.e && opts.e == 'focus'){
+                        if(self[opts.type] == 0){
+                            self[opts.type] = '';
+                        }
+                        return;
+                    }
+                    if(opts.e && opts.e == 'blur'){
+                        var temp = parseInt(self[opts.type]*1000)/1000
+                        self[opts.type] = parseFloat(temp);
+                        return;
+                    }
+
+
+                    var temp = self[opts.type].toString().replace(/[^\d.]/g, '');
+
+                    self[opts.type] = FE_Util.formatNumber({
+                        val : temp,
+                        intSize : 3,
+                        floatSize: 1
+                    });
+                }
+            },
+            ready : function(){
+                 
+            }
+        });
+
+        if(obj && obj.step){
+            cloundOfficeApp.gotoStep(obj.step);
+        }
+    }
+}
+
+initStepBack = 2;
+
+// debug
+if(false){
+    // 创建
+    APP.init()
+}else{
+    // 编辑
+    var initStep = 1;
+    if(initData.HasData){
+        initStep = 2;
+    }
+    APP.init({
+        step : initStep,
+        data : initData
+    })
+}
+</script>

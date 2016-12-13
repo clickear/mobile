@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+    <link href="./style/carousel-datepicker.css" rel="stylesheet" />
+    
+    <script src="./libs/jquery-1.9.1.min.js"></script>
+    <script src="./libs/jquery-ui.min.js"></script>
+
+    <script src="./scripts/carousel.js"></script>
+    <script src="./scripts/carousel-datepicker.js"></script>
+</head>
+<body>
+    <div id="datePlugin1" class="datepickerWrapper"></div>
+    <div style="border-bottom: 1px solid #46C5FF;padding:10px 0;"></div>
+    <div id="datePlugin2" class="datepickerWrapper"></div>    
+    <div style="border-bottom: 1px solid #46C5FF;padding:10px 0;"></div>    
+    <div>
+        <h3 id="spanValue" style="margin-top: 50px; text-align: center;border-bottom: 1px solid #46C5FF;padding-bottom: 40px;">VALUE</h3>
+        <div class="API">
+            <h2 style="margin-top: 50px; text-align: center;font-size: 16px;">可用接口</h2>
+            <ul style="margin: 25px 20px 20px 20px; font-size: 14px;max-height: 420px;overflow-y: scroll;">
+                <li>1、基本配置:</li>
+                <p style="text-indent: 12px">{</p>
+                <p style="text-indent: 24px">id: "",                               // 初始化容器</p>
+                <p style="text-indent: 24px">currDate: '',                         // 默认日期(时间戳，字符串，Date对象)</p>
+                <p style="text-indent: 24px">beginDate: '1970/01/01 00:00',        // 开始日期</p>
+                <p style="text-indent: 24px">endDate: '2100/01/01 00:00',          // 结束日期</p>
+                <p style="text-indent: 24px">format: 'yyyy/MM/dd HH:mm:ss',        // 日期格式</p>
+                <p style="text-indent: 24px">onValueChange: false                  // 值改变事件回调</p>
+                <p style="text-indent: 12px">}</p>
+                <li>2、value&nbsp;方法&nbsp;获取或者设置值</li>
+                <p style="text-indent: 12px">@参数 { Number | String } 时间戳 | 符合格式的字符串</p>
+                <p style="text-indent: 12px">@返回结果 { Number | CarouselDatepicker } 时间戳 | 日期控件</p>
+                <li>3、addValueChangeListener&nbsp;方法&nbsp;添加控件值变更监听</li>
+                <p style="text-indent: 12px">@参数 { Function } 值变更回调</p>           
+                <li>4、setBeginDate&nbsp;方法&nbsp;设置开始限制日期</li>
+                <p style="text-indent: 12px">@参数 { Number | String } 时间戳 | 符合格式的字符串</p>
+                <li>5、setEndDate&nbsp;方法&nbsp;设置结束限制日期</li>
+                <p style="text-indent: 12px">@参数 { Number | String } 时间戳 | 符合格式的字符串</p>              
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var timer = function(func) {
+            var time = new Date();
+            func();
+            alert('s'+(new Date() - time));
+        };
+
+        timer(function() {
+            var cd1 = new CarouselDatepicker({
+                id: "datePlugin1",
+                currDate: new Date('2016/06/10 11:30'),
+                beginDate: new Date('1990/12/12 10:00'),
+                endDate: new Date('2050/12/12 10:05'),
+                format: 'yyyy/MM/dd HH:mm',
+                onValueChange: function(value) {
+                    document.getElementById('spanValue').innerHTML = new Date(value).toString();
+                }           
+            });
+
+            var cd2 = new CarouselDatepicker({
+                id: "datePlugin2",
+                currDate: new Date('2010/12/12 10:00'),
+                beginDate: new Date('2050/12/12 10:00'),
+                endDate: new Date('2050/12/12 10:02'),
+                format: 'yyyy/MM/dd HH:mm:ss',
+                onValueChange: function(value) {
+                    document.getElementById('spanValue').innerHTML = new Date(value).toString();
+                }               
+            });
+
+            var cd2 = new CarouselDatepicker({
+                id: "datePlugin2",
+                currDate: new Date('2010/12/12 10:00'),
+                beginDate: new Date('1990/12/12 10:00'),
+                endDate: new Date('2050/12/12 10:02'),
+                format: 'yyyy/MM/dd',
+                onValueChange: function(value) {
+                    document.getElementById('spanValue').innerHTML = new Date(value).toString();
+                }               
+            });
+
+            cd1.value('2016/12/12 12:12');
+
+            cd1.setBeginDate('2018/03/12 12:12');
+            cd1.setEndDate('2100/06/12 12:12');
+        });     
+    </script> 
+</body>
+</html>
